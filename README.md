@@ -35,6 +35,7 @@ Basically, if you know Java Swing, you know this InventoryAPI
 + implement Anvil GUIs (as text input)
 + better error handling
 + JavaDocs
+
 ##Contribute
 Note: this project is currently **not** under active development by our team!<br>
 If we alter the code in our main repo we will share the updates here.<br>
