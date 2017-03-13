@@ -1,11 +1,16 @@
 #InventoryAPI  
 ![logo](https://www.minecraftlegend.com/wp-content/uploads/2016/12/legend-awakening_logo.png)  
 
-The official Legend Online Inventory API<br>
+This inventory library is used to easily create/modify Minecraft inventories.<br>
+Add events to specific items, generate gui inventories automatically or create big complex menu structures!<br>
+The design is inspired by the Java Swing API and as easy to use.<br>
+Have a look at our [Wiki](https://github.com/LegendOnline/InventoryAPI/wiki) to gain a better understand of how this
+API will change you use Minecraft inventories!
 
 ##How to install
-To use this library, add it to your Java build path and compile it with your plugin. This library is **not** a standalone plugin.<br>
-There are two ways to implement this library into your IDE:
+To use this library, integrate it into your Java build path and compile it with your plugin.<br>
+This library is **not** a standalone plugin!<br>
+There are two ways to implement this library into your project:
 ###Maven
 ```xml
 <repositories>
@@ -29,7 +34,9 @@ Either you can download the source code from [here](https://github.com/LegendOnl
 or download a compiled version from [here]() (freshly compiled from our ci Server) and integrate the library as a dependency.
 
 ##How to use
-Basically, if you know Java Swing, you know this InventoryAPI
+Basically, if you know Java Swing, you know this InventoryAPI<br>
+But please take a look at our [Wiki](https://github.com/LegendOnline/InventoryAPI/wiki)
+Here are some snapshots of inventories created with our API:
 
 ##TODO
 + implement Anvil GUIs (as text input)
@@ -37,9 +44,11 @@ Basically, if you know Java Swing, you know this InventoryAPI
 + JavaDocs
 
 ##Contribute
-Note: this project is currently **not** under active development by our team!<br>
+**Note:** this project is currently **not** under active development by **our team**!<br>
 If we alter the code in our main repo we will share the updates here.<br>
 If you want to contribute to this awesome project please use GitHub's [Pull request](https://github.com/LegendOnline/InventoryAPI/compare)
 feature.<br>
 Approved code will be merged back into our main repo, so you can see your code on our Network! Nice!<br>
+If you want to contribute but you don't know what to do, we would be pleased if you work on tasks either from the TODO list
+or from the [Issues](https://github.com/LegendOnline/InventoryAPI/issues) Page.<br>
 If you are not that much into, digging into other peoples code feel free to open an issue and tell us your awesome feature ideas.
