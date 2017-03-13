@@ -3,9 +3,9 @@
 
 This inventory library is used to easily create/modify Minecraft inventories.<br>
 Add events to specific items, generate gui inventories automatically or create big complex menu structures!<br>
-The design is inspired by the Java Swing API and as easy to use.<br>
+The design is inspired by the Java Swing API and is as easy to use.<br>
 Have a look at our [Wiki](https://github.com/LegendOnline/InventoryAPI/wiki) to gain a better understand of how this
-API will change you use Minecraft inventories!
+API will change your thinking about Minecraft inventories!
 
 ##How to install
 To use this library, integrate it into your Java build path and compile it with your plugin.<br>
