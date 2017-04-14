@@ -2,7 +2,7 @@
 set -e # Exit with nonzero exit code if anything fails
 
 SOURCE_BRANCH="master"
-TARGET_BRANCH="gh-pages"
+TARGET_BRANCH="travis"
 
 # Pull requests and commits to other branches shouldn't try to deploy, just build to verify
 if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_BRANCH" != "$SOURCE_BRANCH" ]; then
@@ -18,19 +18,20 @@ SHA=`git rev-parse --verify HEAD`
 
 # Clone the existing gh-pages for this repo into out/
 # Create a new empty branch if gh-pages doesn't exist yet (should only happen on first deply)
+rm -rf out/**/* || exit 0
+
 git clone $REPO out
 cd out
 git checkout $TARGET_BRANCH || git checkout --orphan $TARGET_BRANCH
-cd ..
 
-# Clean out existing contents
-rm -rf out/**/* || exit 0
+# build
+mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+cd target
+rm -rf classes
+rm -rf generated-sources
+rm -rf maven-archiver
+rm -rf maven-status
 
-# Run our compile script
-npm run spec
-
-# Now let's go have some fun with the cloned repo
-cd out
 git config user.name "Travis CI"
 git config user.email "jan.hof99@gmail.com"
 
@@ -43,7 +44,7 @@ fi
 # Commit the "changes", i.e. the new version.
 # The delta will show diffs between new and old versions.
 git add .
-git commit -m "Deploy to GitHub Pages: ${SHA}"
+git commit -m "Deploy to GitHub: ${SHA}"
 
 # Get the deploy key by using Travis's stored variables to decrypt deploy_key.enc
 ENCRYPTED_KEY_VAR="encrypted_${ENCRYPTION_LABEL}_key"

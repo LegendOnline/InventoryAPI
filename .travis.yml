@@ -5,3 +5,6 @@ env:
   global:
   - ENCRYPTION_LABEL: "09727d2d1f11"
   - COMMIT_AUTHOR_EMAIL: "jan.hof99@gmail.com"
+branches:
+  except:
+    - travis
