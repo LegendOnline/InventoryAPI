@@ -1,4 +1,4 @@
-package main.java.com.minecraftlegend.inventoryapi.utils;
+package com.minecraftlegend.inventoryapi.utils;
 
 /**
  * @Author Sauerbier | Jan

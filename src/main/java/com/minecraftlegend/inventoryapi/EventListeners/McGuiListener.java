@@ -1,19 +1,19 @@
-package main.java.com.minecraftlegend.inventoryapi.EventListeners;
+package com.minecraftlegend.inventoryapi.EventListeners;
 
-import main.java.com.minecraftlegend.inventoryapi.Events.ComponentClickEvent;
-import main.java.com.minecraftlegend.inventoryapi.Events.ComponentDragEvent;
-import main.java.com.minecraftlegend.inventoryapi.Events.ContainerCloseEvent;
-import main.java.com.minecraftlegend.inventoryapi.Events.ContainerOpenEvent;
-import main.java.com.minecraftlegend.inventoryapi.GUIComponent;
-import main.java.com.minecraftlegend.inventoryapi.GUIContainer;
-import main.java.com.minecraftlegend.inventoryapi.GUIElement;
+
+import com.minecraftlegend.inventoryapi.Events.ComponentClickEvent;
+import com.minecraftlegend.inventoryapi.Events.ComponentDragEvent;
+import com.minecraftlegend.inventoryapi.Events.ContainerCloseEvent;
+import com.minecraftlegend.inventoryapi.Events.ContainerOpenEvent;
+import com.minecraftlegend.inventoryapi.GUIComponent;
+import com.minecraftlegend.inventoryapi.GUIContainer;
+import com.minecraftlegend.inventoryapi.GUIElement;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
-
 
 /**
  * @Author Sauerbier | Jan
@@ -33,7 +33,7 @@ public class McGuiListener implements Listener {
         if(event.getInventory().equals(gui.getInventory())){
             event.setCancelled(gui.isLocked());
             for (GUIComponent guiComponent : gui.getComponents()) {
-                if(guiComponent instanceof GUIElement){
+                if(guiComponent instanceof GUIElement ){
                     event.setCancelled(guiComponent.isLocked());
                     if(((GUIElement) guiComponent).getNative().equals(event.getCurrentItem())){
                         guiComponent.getEvents().forEach(e -> e.onClick(new ComponentClickEvent(gui,guiComponent, event.getWhoClicked(), event.getClick())));

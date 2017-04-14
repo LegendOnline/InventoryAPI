@@ -1,12 +1,12 @@
-package main.java.com.minecraftlegend.inventoryapi.Elements;
+package com.minecraftlegend.inventoryapi.Elements;
 
-import main.java.com.minecraftlegend.inventoryapi.Events.ComponentClickEvent;
-import main.java.com.minecraftlegend.inventoryapi.Events.ContainerCloseEvent;
-import main.java.com.minecraftlegend.inventoryapi.GUIContainer;
-import main.java.com.minecraftlegend.inventoryapi.GUIEvent;
-import main.java.com.minecraftlegend.inventoryapi.GUILayout;
-import main.java.com.minecraftlegend.inventoryapi.McGui;
-import main.java.com.minecraftlegend.inventoryapi.utils.Vector2i;
+import com.minecraftlegend.inventoryapi.Events.ComponentClickEvent;
+import com.minecraftlegend.inventoryapi.Events.ContainerCloseEvent;
+import com.minecraftlegend.inventoryapi.GUIContainer;
+import com.minecraftlegend.inventoryapi.GUIEvent;
+import com.minecraftlegend.inventoryapi.GUILayout;
+import com.minecraftlegend.inventoryapi.McGui;
+import com.minecraftlegend.inventoryapi.utils.Vector2i;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -26,7 +26,7 @@ public class GUISubContainer extends McGui {
     private GUISubContainer child;
     private JavaPlugin plugin;
 
-    public GUISubContainer(JavaPlugin plugin, GUISubContainer child, String title, GUILayout layout, boolean openParentOnClose) {
+    public GUISubContainer( JavaPlugin plugin, GUISubContainer child, String title, GUILayout layout, boolean openParentOnClose) {
         this(plugin, null,child,title,layout,openParentOnClose);
     }
 

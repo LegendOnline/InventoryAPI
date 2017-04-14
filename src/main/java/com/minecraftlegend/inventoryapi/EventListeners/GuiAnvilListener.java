@@ -1,14 +1,25 @@
-package main.java.com.minecraftlegend.inventoryapi.EventListeners;
+package com.minecraftlegend.inventoryapi.EventListeners;
 
-import main.java.com.minecraftlegend.inventoryapi.Elements.GUIAnvil;
-import main.java.com.minecraftlegend.inventoryapi.Events.*;
-import main.java.com.minecraftlegend.inventoryapi.GUIComponent;
-import main.java.com.minecraftlegend.inventoryapi.GUIElement;
+
+import com.minecraftlegend.inventoryapi.Elements.GUIAnvil;
+import com.minecraftlegend.inventoryapi.Events.AnvilEvent;
+import com.minecraftlegend.inventoryapi.Events.AnvilIngredient1Event;
+import com.minecraftlegend.inventoryapi.Events.AnvilIngredient2Event;
+import com.minecraftlegend.inventoryapi.Events.ComponentClickEvent;
+import com.minecraftlegend.inventoryapi.Events.ComponentDragEvent;
+import com.minecraftlegend.inventoryapi.Events.ContainerCloseEvent;
+import com.minecraftlegend.inventoryapi.Events.ContainerOpenEvent;
+import com.minecraftlegend.inventoryapi.GUIComponent;
+import com.minecraftlegend.inventoryapi.GUIElement;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.*;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.InventoryType;
 
 /**
  * @Author Sauerbier | Jan
@@ -27,7 +38,7 @@ public class GuiAnvilListener implements Listener {
         if(event.getInventory().equals(gui.getInventory())){
             event.setCancelled(gui.isLocked());
             for (GUIComponent guiComponent : gui.getComponents()) {
-                if(guiComponent instanceof GUIElement){
+                if(guiComponent instanceof GUIElement ){
                     event.setCancelled(guiComponent.isLocked());
                     if(((GUIElement) guiComponent).getNative().equals(event.getCurrentItem())){
                         guiComponent.getEvents().forEach(e -> e.onClick(new ComponentClickEvent(gui,guiComponent, event.getWhoClicked(), event.getClick())));
@@ -55,7 +66,7 @@ public class GuiAnvilListener implements Listener {
 
             gui.getEvents().forEach(e -> {
 
-                if(event.getRawSlot() == 0 && e instanceof AnvilEvent){
+                if(event.getRawSlot() == 0 && e instanceof AnvilEvent ){
                     ((AnvilEvent)e).onIngredient1Click(new AnvilIngredient1Event(gui, (Player) event.getWhoClicked()));
                 }else if(event.getRawSlot() == 1 && e instanceof AnvilEvent){
                     ((AnvilEvent)e).onIngredient2Click(new AnvilIngredient2Event(gui, (Player) event.getWhoClicked()));

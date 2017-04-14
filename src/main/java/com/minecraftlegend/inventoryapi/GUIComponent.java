@@ -1,8 +1,7 @@
-package main.java.com.minecraftlegend.inventoryapi;
+package com.minecraftlegend.inventoryapi;
 
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import sun.plugin.navig.motif.Plugin;
 
 import java.util.List;
 

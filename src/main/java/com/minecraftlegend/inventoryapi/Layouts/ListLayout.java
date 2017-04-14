@@ -1,15 +1,16 @@
-package main.java.com.minecraftlegend.inventoryapi.Layouts;
+package com.minecraftlegend.inventoryapi.Layouts;
+
 
 import com.google.common.collect.Queues;
-import main.java.com.minecraftlegend.inventoryapi.Elements.GUIButton;
-import main.java.com.minecraftlegend.inventoryapi.Elements.GUILabel;
-import main.java.com.minecraftlegend.inventoryapi.Elements.GUISubContainer;
-import main.java.com.minecraftlegend.inventoryapi.Events.ComponentClickEvent;
-import main.java.com.minecraftlegend.inventoryapi.GUIContainer;
-import main.java.com.minecraftlegend.inventoryapi.GUIElement;
-import main.java.com.minecraftlegend.inventoryapi.GUIEvent;
-import main.java.com.minecraftlegend.inventoryapi.GUILayout;
-import main.java.com.minecraftlegend.inventoryapi.utils.Vector2i;
+import com.minecraftlegend.inventoryapi.Elements.GUIButton;
+import com.minecraftlegend.inventoryapi.Elements.GUILabel;
+import com.minecraftlegend.inventoryapi.Elements.GUISubContainer;
+import com.minecraftlegend.inventoryapi.Events.ComponentClickEvent;
+import com.minecraftlegend.inventoryapi.GUIContainer;
+import com.minecraftlegend.inventoryapi.GUIElement;
+import com.minecraftlegend.inventoryapi.GUIEvent;
+import com.minecraftlegend.inventoryapi.GUILayout;
+import com.minecraftlegend.inventoryapi.utils.Vector2i;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
@@ -82,7 +83,7 @@ public class ListLayout implements GUILayout {
                    }
                }
 
-               GUILabel label = new GUILabel(" ",Material.STAINED_GLASS_PANE,(byte)7);
+               GUILabel label = new GUILabel(" ", Material.STAINED_GLASS_PANE,(byte)7);
                for (int i = 0; i < 9; i++) {
                     GUILabel clone = (GUILabel) label.clone();
                    clone.setPosition(new Vector2i(i,rows));

@@ -1,4 +1,4 @@
-package main.java.com.minecraftlegend.inventoryapi.Events;
+package com.minecraftlegend.inventoryapi.Events;
 
 /**
  * @Author Sauerbier | Jan

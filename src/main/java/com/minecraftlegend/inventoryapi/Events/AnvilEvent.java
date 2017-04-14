@@ -1,7 +1,7 @@
-package main.java.com.minecraftlegend.inventoryapi.Events;
+package com.minecraftlegend.inventoryapi.Events;
 
 
-import main.java.com.minecraftlegend.inventoryapi.GUIEvent;
+import com.minecraftlegend.inventoryapi.GUIEvent;
 
 /**
  * @Author Sauerbier | Jan

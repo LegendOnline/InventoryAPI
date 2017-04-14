@@ -1,8 +1,8 @@
-package main.java.com.minecraftlegend.inventoryapi.Layouts;
+package com.minecraftlegend.inventoryapi.Layouts;
 
-import main.java.com.minecraftlegend.inventoryapi.GUIContainer;
-import main.java.com.minecraftlegend.inventoryapi.GUIElement;
-import main.java.com.minecraftlegend.inventoryapi.utils.Vector2i;
+import com.minecraftlegend.inventoryapi.GUIContainer;
+import com.minecraftlegend.inventoryapi.GUIElement;
+import com.minecraftlegend.inventoryapi.utils.Vector2i;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;

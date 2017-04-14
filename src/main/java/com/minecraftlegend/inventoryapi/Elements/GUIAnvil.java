@@ -1,9 +1,14 @@
-package main.java.com.minecraftlegend.inventoryapi.Elements;
+package com.minecraftlegend.inventoryapi.Elements;
 
-import main.java.com.minecraftlegend.inventoryapi.EventListeners.GuiAnvilListener;
-import main.java.com.minecraftlegend.inventoryapi.*;
-import main.java.com.minecraftlegend.inventoryapi.utils.Vector2i;
-import org.apache.commons.lang.Validate;
+
+import com.minecraftlegend.inventoryapi.EventListeners.GuiAnvilListener;
+import com.minecraftlegend.inventoryapi.GUIComponent;
+import com.minecraftlegend.inventoryapi.GUIContainer;
+import com.minecraftlegend.inventoryapi.GUIElement;
+import com.minecraftlegend.inventoryapi.GUIEvent;
+import com.minecraftlegend.inventoryapi.GUILayout;
+import com.minecraftlegend.inventoryapi.utils.Vector2i;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.inventory.InventoryType;
@@ -62,7 +67,7 @@ public class GUIAnvil implements GUIContainer {
     @Override
     public void add(GUIComponent component) {
         components.add(component);
-        if(component instanceof GUIElement){
+        if(component instanceof GUIElement ){
             ((GUIElement) component).setParent(this);
         }
     }

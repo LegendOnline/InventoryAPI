@@ -1,6 +1,7 @@
-package main.java.com.minecraftlegend.inventoryapi;
+package com.minecraftlegend.inventoryapi;
 
-import main.java.com.minecraftlegend.inventoryapi.utils.Vector2i;
+
+import com.minecraftlegend.inventoryapi.utils.Vector2i;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -8,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
  * @Copyright 2016 by Jan Hof
  * All rights reserved.
  **/
-public interface GUIElement extends GUIComponent{
+public interface GUIElement extends GUIComponent {
 
     void setParent(GUIComponent parent);
     GUIComponent getParent();

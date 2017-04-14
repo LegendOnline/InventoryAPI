@@ -1,6 +1,6 @@
-package main.java.com.minecraftlegend.inventoryapi;
+package com.minecraftlegend.inventoryapi;
 
-import main.java.com.minecraftlegend.inventoryapi.utils.Vector2i;
+import com.minecraftlegend.inventoryapi.utils.Vector2i;
 import org.bukkit.event.inventory.InventoryType;
 
 /**

@@ -1,7 +1,8 @@
-package main.java.com.minecraftlegend.inventoryapi.Events;
+package com.minecraftlegend.inventoryapi.Events;
 
+
+import com.minecraftlegend.inventoryapi.Elements.GUIAnvil;
 import org.bukkit.entity.Player;
-import main.java.com.minecraftlegend.inventoryapi.Elements.GUIAnvil;
 
 /**
  * @Author Sauerbier | Jan
@@ -9,7 +10,7 @@ import main.java.com.minecraftlegend.inventoryapi.Elements.GUIAnvil;
  * All rights reserved.
  **/
 public class AnvilIngredient2Event extends AnvilIngredient1Event{
-    public AnvilIngredient2Event( GUIAnvil anvil,Player player) {
+    public AnvilIngredient2Event( GUIAnvil anvil, Player player) {
         super(anvil,player);
     }
 }

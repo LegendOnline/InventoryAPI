@@ -1,4 +1,4 @@
-package main.java.com.minecraftlegend.inventoryapi.Elements;
+package com.minecraftlegend.inventoryapi.Elements;
 
 import net.minecraft.server.v1_10_R1.BlockPosition;
 import net.minecraft.server.v1_10_R1.PacketPlayOutOpenSignEditor;

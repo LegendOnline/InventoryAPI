@@ -1,4 +1,4 @@
-package main.java.com.minecraftlegend.inventoryapi.Elements;
+package com.minecraftlegend.inventoryapi.Elements;
 
 import org.bukkit.Material;
 

@@ -1,9 +1,10 @@
-package main.java.com.minecraftlegend.inventoryapi;
+package com.minecraftlegend.inventoryapi;
 
-import main.java.com.minecraftlegend.inventoryapi.Events.ComponentClickEvent;
-import main.java.com.minecraftlegend.inventoryapi.Events.ComponentDragEvent;
-import main.java.com.minecraftlegend.inventoryapi.Events.ContainerCloseEvent;
-import main.java.com.minecraftlegend.inventoryapi.Events.ContainerOpenEvent;
+
+import com.minecraftlegend.inventoryapi.Events.ComponentClickEvent;
+import com.minecraftlegend.inventoryapi.Events.ComponentDragEvent;
+import com.minecraftlegend.inventoryapi.Events.ContainerCloseEvent;
+import com.minecraftlegend.inventoryapi.Events.ContainerOpenEvent;
 
 /**
  * @Author Sauerbier | Jan

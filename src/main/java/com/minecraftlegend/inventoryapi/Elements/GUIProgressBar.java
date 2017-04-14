@@ -1,11 +1,12 @@
-package main.java.com.minecraftlegend.inventoryapi.Elements;
+package com.minecraftlegend.inventoryapi.Elements;
 
-import main.java.com.minecraftlegend.inventoryapi.GUIComponent;
-import main.java.com.minecraftlegend.inventoryapi.GUIContainer;
-import main.java.com.minecraftlegend.inventoryapi.GUIElement;
-import main.java.com.minecraftlegend.inventoryapi.GUIEvent;
-import main.java.com.minecraftlegend.inventoryapi.utils.Vector2i;
-import org.apache.commons.lang.Validate;
+
+import com.minecraftlegend.inventoryapi.GUIComponent;
+import com.minecraftlegend.inventoryapi.GUIContainer;
+import com.minecraftlegend.inventoryapi.GUIElement;
+import com.minecraftlegend.inventoryapi.GUIEvent;
+import com.minecraftlegend.inventoryapi.utils.Vector2i;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 

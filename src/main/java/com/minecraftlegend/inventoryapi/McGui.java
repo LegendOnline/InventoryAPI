@@ -1,8 +1,9 @@
-package main.java.com.minecraftlegend.inventoryapi;
+package com.minecraftlegend.inventoryapi;
 
-import main.java.com.minecraftlegend.inventoryapi.EventListeners.McGuiListener;
-import main.java.com.minecraftlegend.inventoryapi.utils.Vector2i;
-import org.apache.commons.lang.Validate;
+
+import com.minecraftlegend.inventoryapi.EventListeners.McGuiListener;
+import com.minecraftlegend.inventoryapi.utils.Vector2i;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -24,17 +25,17 @@ import java.util.Random;
  * @Copyright 2016 by Jan Hof
  * All rights reserved.
  **/
-public class McGui implements GUIContainer{
+public class McGui implements GUIContainer {
 
     private Inventory inventory;
     private String title = "McGUI";
-    private GUILayout layout;
+    private com.minecraftlegend.inventoryapi.GUILayout layout;
     private List<GUIEvent> events = new ArrayList<>();
     private List<GUIComponent> components = new ArrayList<>();
     private boolean lock;
     private McGuiListener listener;
 
-    public McGui(JavaPlugin plugin, String title, GUILayout layout){
+    public McGui( JavaPlugin plugin, String title, GUILayout layout){
         this.title = title;
         this.layout = layout;
         listener = new McGuiListener(this);
@@ -55,9 +56,9 @@ public class McGui implements GUIContainer{
             inventory = Bukkit.createInventory(null,layout.getInventoryType(),title);
         }
 
-        components.forEach(GUIComponent::init);
+        components.forEach( GUIComponent::init);
         components.forEach(e -> {
-            if(e instanceof GUIElement){
+            if(e instanceof GUIElement ){
                 ((GUIElement) e).draw();
             }
         });
@@ -87,9 +88,9 @@ public class McGui implements GUIContainer{
 
 
     @Override
-    public void add(GUIComponent component) {
+    public void add( GUIComponent component) {
         components.add(component);
-        if(component instanceof GUIElement){
+        if(component instanceof GUIElement ){
             ((GUIElement) component).setParent(this);
             if(inventory != null)
              ((GUIElement) component).draw();
@@ -97,9 +98,9 @@ public class McGui implements GUIContainer{
     }
 
     @Override
-    public void remove(GUIComponent component) {
+    public void remove( GUIComponent component) {
         components.remove(component);
-        if(component instanceof GUIElement){
+        if(component instanceof GUIElement ){
             ((GUIElement) component).setParent(null);
         }
     }
@@ -119,8 +120,8 @@ public class McGui implements GUIContainer{
     }
 
 
-    public static ItemStack getPlayerHead(Player player){
-        ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (short)3);
+    public static ItemStack getPlayerHead( Player player){
+        ItemStack head = new ItemStack( Material.SKULL_ITEM, 1, (short)3);
         SkullMeta headMeta = (SkullMeta) head.getItemMeta();
         headMeta.setOwner(player.getName());
         head.setItemMeta(headMeta);
@@ -138,7 +139,7 @@ public class McGui implements GUIContainer{
 
 
     @Override
-    public void addEvent(GUIEvent event) {
+    public void addEvent( GUIEvent event) {
         this.events.add(event);
     }
 

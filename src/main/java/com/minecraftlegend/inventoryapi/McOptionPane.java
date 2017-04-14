@@ -1,12 +1,13 @@
-package main.java.com.minecraftlegend.inventoryapi;
+package com.minecraftlegend.inventoryapi;
 
-import main.java.com.minecraftlegend.inventoryapi.Elements.GUIButton;
-import main.java.com.minecraftlegend.inventoryapi.Elements.GUILabel;
-import main.java.com.minecraftlegend.inventoryapi.Events.ComponentClickEvent;
-import main.java.com.minecraftlegend.inventoryapi.Events.ContainerCloseEvent;
-import main.java.com.minecraftlegend.inventoryapi.Events.GUIEventCallback;
-import main.java.com.minecraftlegend.inventoryapi.Layouts.ModelLayout;
-import main.java.com.minecraftlegend.inventoryapi.utils.Vector2i;
+
+import com.minecraftlegend.inventoryapi.Elements.GUIButton;
+import com.minecraftlegend.inventoryapi.Elements.GUILabel;
+import com.minecraftlegend.inventoryapi.Events.ComponentClickEvent;
+import com.minecraftlegend.inventoryapi.Events.ContainerCloseEvent;
+import com.minecraftlegend.inventoryapi.Events.GUIEventCallback;
+import com.minecraftlegend.inventoryapi.Layouts.ModelLayout;
+import com.minecraftlegend.inventoryapi.utils.Vector2i;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -22,7 +23,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class McOptionPane {
 
 
-    public static void showConfirmDialog(JavaPlugin plugin, Player player, String message, GUIEventCallback<ComponentClickEvent> onConfirm, GUIEventCallback<ComponentClickEvent> onDeny) {
+    public static void showConfirmDialog( JavaPlugin plugin, Player player, String message, GUIEventCallback<ComponentClickEvent> onConfirm, GUIEventCallback<ComponentClickEvent> onDeny) {
         showConfirmDialog(plugin, player,message,"§aOk","§cAbbrechen",onConfirm,onDeny);
     }
 

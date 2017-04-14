@@ -1,7 +1,8 @@
-package main.java.com.minecraftlegend.inventoryapi.Events;
+package com.minecraftlegend.inventoryapi.Events;
 
-import main.java.com.minecraftlegend.inventoryapi.GUIComponent;
-import main.java.com.minecraftlegend.inventoryapi.GUIContainer;
+
+import com.minecraftlegend.inventoryapi.GUIComponent;
+import com.minecraftlegend.inventoryapi.GUIContainer;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.ClickType;
 
