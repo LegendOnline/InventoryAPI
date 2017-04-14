@@ -25,30 +25,19 @@ cd out
 git checkout $TARGET_BRANCH || git checkout --orphan $TARGET_BRANCH
 
 # build
-mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-rm -rf src
-
-cd target
-rm -rf classes/
-rm -rf maven-archiver/
-rm -rf maven-status/
-rm -f .travis
-rm -f .gitignore
-rm -f *.md
-rm -f deploy.sh
-rm -f deploy_key.enc
-rm -f pom.xml
-
+# mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 echo deleted junk files
+rm -rf *
+cp /home/travis/.m2/repository/com/minecraftlegend/inventoryapi/1.0-SNAPSHOT/inventoryapi-1.0-SNAPSHOT.jar .
 # Commit the "changes", i.e. the new version.
 # The delta will show diffs between new and old versions.
-cd ../..
+
 git config user.name "Travis CI"
 git config user.email "jan.hof99@gmail.com"
 
 echo conigured git
 
-git add -A target/
+git add -A .
 git commit -m "Deploy to GitHub: ${SHA}"
 
 
