@@ -29,9 +29,9 @@ mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 rm -rf src
 
 cd target
-rm -rf classes
-rm -rf maven-archiver
-rm -rf maven-status
+rm -rf classes/
+rm -rf maven-archiver/
+rm -rf maven-status/
 rm -f .travis
 rm -f .gitignore
 rm -f *.md
@@ -39,15 +39,20 @@ rm -f deploy.sh
 rm -f deploy_key.enc
 rm -f pom.xml
 
+echo deleted junk files
 # Commit the "changes", i.e. the new version.
 # The delta will show diffs between new and old versions.
 cd ../..
 git config user.name "Travis CI"
 git config user.email "jan.hof99@gmail.com"
 
-git add target/
+echo conigured git
+
+git add -A target/
 git commit -m "Deploy to GitHub: ${SHA}"
 
+
+echo commited files
 # Get the deploy key by using Travis's stored variables to decrypt deploy_key.enc
 
 ENCRYPTED_KEY_VAR="encrypted_${ENCRYPTION_LABEL}_key"
