@@ -27,10 +27,6 @@ git checkout $TARGET_BRANCH || git checkout --orphan $TARGET_BRANCH
 # build
 mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 cd target
-rm -rf classes
-rm -rf generated-sources
-rm -rf maven-archiver
-rm -rf maven-status
 
 git config user.name "Travis CI"
 git config user.email "jan.hof99@gmail.com"
