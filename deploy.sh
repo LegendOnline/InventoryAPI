@@ -44,6 +44,8 @@ git commit -m "Deploy to GitHub: ${SHA}"
 echo commited files
 # Get the deploy key by using Travis's stored variables to decrypt deploy_key.enc
 
+cd ..
+
 ENCRYPTED_KEY_VAR="encrypted_${ENCRYPTION_LABEL}_key"
 ENCRYPTED_IV_VAR="encrypted_${ENCRYPTION_LABEL}_iv"
 ENCRYPTED_KEY=${!ENCRYPTED_KEY_VAR}
@@ -54,6 +56,7 @@ eval `ssh-agent -s`
 ssh-add deploy_key
 
 # Now that we're all set up, we can push.
+cd out
 git push $SSH_REPO $TARGET_BRANCH
 
     Contact GitHub API Training Shop Blog About 
