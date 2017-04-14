@@ -7,7 +7,9 @@ The design is inspired by the Java Swing API and is as easy to use.<br>
 Have a look at our [Wiki](https://github.com/LegendOnline/InventoryAPI/wiki) to gain a better understand of how this
 API will change your thinking about Minecraft inventories!
 
-##How to install
+## Last CI build status: [![Build Status](https://travis-ci.org/LegendOnline/InventoryAPI.svg?branch=master)](https://travis-ci.org/LegendOnline/InventoryAPI)
+
+## How to install
 To use this library, integrate it into your Java build path and compile it with your plugin.<br>
 This library is **not** a standalone plugin!<br>
 There are two ways to implement this library into your project:
