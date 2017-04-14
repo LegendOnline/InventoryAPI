@@ -1,6 +1,7 @@
 language: java
 jdk: oraclejdk8
 #script: bash ./deploy.sh
+before_install: "git clone -b travis `git config --get remote.origin.url` target/travis"
 script: "mvn deploy --settings settings.xml"
 env:
   global:
