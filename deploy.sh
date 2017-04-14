@@ -27,6 +27,9 @@ git checkout $TARGET_BRANCH || git checkout --orphan $TARGET_BRANCH
 # build
 mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 cd target
+rm -rf classes
+rm -rf maven-archiver
+rm -rf maven-status
 
 git config user.name "Travis CI"
 git config user.email "jan.hof99@gmail.com"
@@ -37,6 +40,7 @@ git add .
 git commit -m "Deploy to GitHub: ${SHA}"
 
 # Get the deploy key by using Travis's stored variables to decrypt deploy_key.enc
+cd ../..
 ENCRYPTED_KEY_VAR="encrypted_${ENCRYPTION_LABEL}_key"
 ENCRYPTED_IV_VAR="encrypted_${ENCRYPTION_LABEL}_iv"
 ENCRYPTED_KEY=${!ENCRYPTED_KEY_VAR}
