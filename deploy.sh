@@ -45,7 +45,7 @@ cd ../..
 git config user.name "Travis CI"
 git config user.email "jan.hof99@gmail.com"
 
-git add out/target/
+git add target/
 git commit -m "Deploy to GitHub: ${SHA}"
 
 # Get the deploy key by using Travis's stored variables to decrypt deploy_key.enc
