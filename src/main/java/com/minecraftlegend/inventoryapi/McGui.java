@@ -3,7 +3,7 @@ package com.minecraftlegend.inventoryapi;
 
 import com.minecraftlegend.inventoryapi.EventListeners.McGuiListener;
 import com.minecraftlegend.inventoryapi.utils.Vector2i;
-import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
