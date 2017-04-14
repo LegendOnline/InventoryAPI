@@ -39,12 +39,11 @@ rm -f deploy.sh
 rm -f deploy_key.enc
 rm -f pom.xml
 
-git config user.name "Travis CI"
-git config user.email "jan.hof99@gmail.com"
-
 # Commit the "changes", i.e. the new version.
 # The delta will show diffs between new and old versions.
 cd ../..
+git config user.name "Travis CI"
+git config user.email "jan.hof99@gmail.com"
 
 git add out/target/
 git commit -m "Deploy to GitHub: ${SHA}"
