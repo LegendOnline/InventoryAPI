@@ -58,8 +58,3 @@ ssh-add deploy_key
 # Now that we're all set up, we can push.
 cd out
 git push $SSH_REPO $TARGET_BRANCH
-
-    Contact GitHub API Training Shop Blog About 
-
-    © 2017 GitHub, Inc. Terms Privacy Security Status Help 
-
