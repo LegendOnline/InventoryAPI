@@ -32,7 +32,8 @@ cd target
 rm -rf classes
 rm -rf maven-archiver
 rm -rf maven-status
-rm -f .*
+rm -f .travis
+rm -f .gitignore
 rm -f *.md
 rm -f deploy.sh
 rm -f deploy_key.enc
