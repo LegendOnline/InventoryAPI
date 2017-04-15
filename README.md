@@ -28,7 +28,7 @@ There are two ways to implement this library into your project:
 ```
 ### Direct implementation
 Either you can download the source code from [here](https://github.com/LegendOnline/InventoryAPI.git) and copy it into a separate package of your project,<br>
-or download a compiled version from [here]() (freshly compiled from our ci Server) and integrate the library as a dependency.
+or download a compiled version from [here](https://github.com/LegendOnline/InventoryAPI/blob/mvn-repo/com/minecraftlegend/inventoryapi/1.0-SNAPSHOT/inventoryapi-1.0-20170414.234038-1.jar) (freshly compiled from our ci Server) and integrate the library as a dependency.
 
 ## How to use
 Basically, if you know Java Swing, you know this InventoryAPI<br>
