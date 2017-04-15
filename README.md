@@ -17,7 +17,7 @@ There are two ways to implement this library into your project:
 ```xml
  <repository>
    <id>LegendOnline</id>
-   <url>https://legendonline.github.io/InventoryAPI/</url>
+   <url>https://raw.githubusercontent.com/LegendOnline/InventoryAPI/mvn-repo/</url>
  </repository>
 
  <dependency>
