@@ -15,21 +15,16 @@ This library is **not** a standalone plugin!<br>
 There are two ways to implement this library into your project:
 ### Maven
 ```xml
-<repositories>
-  <repository>
-    <id>dmulloy2-repo</id>
-    <url>http://repo.dmulloy2.net/content/groups/public/</url>
-  </repository>
-  ...
-</repositories>
+ <repository>
+   <id>LegendOnline</id>
+   <url>https://legendonline.github.io/InventoryAPI/</url>
+ </repository>
 
-<dependencies>
-  <dependency>
-    <groupId>com.comphenix.protocol</groupId>
-    <artifactId>ProtocolLib</artifactId>
-    <version>3.6.5</version>
-  </dependency>
-</dependencies>
+ <dependency>
+    <groupId>com.minecraftlegend</groupId>
+    <artifactId>inventoryapi</artifactId>
+    <version>LATEST</version>
+ </dependency>
 ```
 ### Direct implementation
 Either you can download the source code from [here](https://github.com/LegendOnline/InventoryAPI.git) and copy it into a separate package of your project,<br>
