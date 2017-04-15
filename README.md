@@ -23,7 +23,7 @@ There are two ways to implement this library into your project:
  <dependency>
     <groupId>com.minecraftlegend</groupId>
     <artifactId>inventoryapi</artifactId>
-    <version>LATEST</version>
+    <version>1.0-SNAPSHOT</version>
  </dependency>
 ```
 ### Direct implementation
