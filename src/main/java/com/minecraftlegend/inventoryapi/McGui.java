@@ -37,6 +37,7 @@ public class McGui implements GUIContainer {
 
     /**
      * Creates a basic inventory view, which is basically the entry point to this api
+     * @param plugin to attach events to
      * @param title the inventory title
      * @param layout the layout that should be applied to design this gui
      *

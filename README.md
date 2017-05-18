@@ -23,7 +23,8 @@ There are two ways to implement this library into your project:
  <dependency>
     <groupId>com.minecraftlegend</groupId>
     <artifactId>inventoryapi</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
+    <scope>compile</scope>
  </dependency>
 ```
 ### Direct implementation
@@ -35,10 +36,21 @@ Basically, if you know Java Swing, you know this InventoryAPI<br>
 But please take a look at our [Wiki](https://github.com/LegendOnline/InventoryAPI/wiki)
 Here are some snapshots of inventories created with our API:
 
+##Changelog
+###Version 1.1:
++ added TextInput support trough Anvil gui's
++ added events to handle text input
++ added GUInput element to support item inputs
++ removed lots of bugs
++ implemented more exceptions
++ added some JavaDocs
++ added ItemBuilder class for easy item creation
++ added various util classes regarding nms, reflection and exceptions 
 ## TODO
-+ implement Anvil GUIs (as text input)
++ ~~implement Anvil GUIs (as text input)~~
 + better error handling
 + JavaDocs
++ ADD MORE FUNCTIONALITY!!!
 
 ## Contribute
 **Note:** this project is currently under active development by **our team**!<br>

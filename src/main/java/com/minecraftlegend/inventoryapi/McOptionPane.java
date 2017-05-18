@@ -24,6 +24,7 @@ public class McOptionPane {
 
     /**
      * Opens a confirm / deny dialog
+     * @param plugin to attach events to
      * @param player the player to whom the dialog should be visible
      * @param message the confirm Question that should be asked (Inventory Title)
      * @param onConfirm callback event that is triggered, if the player clicks the confirm button
@@ -36,6 +37,7 @@ public class McOptionPane {
 
     /**
      * Opens a confirm / deny dialog
+     * @param plugin to attach events to
      * @param player the player to whom the dialog should be visible
      * @param message the confirm Question that should be asked (Inventory Title)
      * @param acceptLabel the name, the confirm button should be called

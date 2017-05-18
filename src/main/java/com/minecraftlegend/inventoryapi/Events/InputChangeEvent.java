@@ -16,7 +16,7 @@ public class InputChangeEvent implements EventWrapper {
     private HumanEntity player;
 
     /**
-     * This event is triggered whenever a change to a {@link com.legend.cloud.clientapi.api.gui.elements.GUInput} element is made
+     * This event is triggered whenever a change to a {@link com.minecraftlegend.inventoryapi.Elements.GUInput} element is made
      * @param action the type of action
      * @param component the triggered component
      * @param player who triggered the event
