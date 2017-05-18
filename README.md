@@ -1,4 +1,4 @@
-# InventoryAPI  
+# InventoryAPI 1.1
 ![logo](https://www.minecraftlegend.com/wp-content/uploads/2016/12/legend-awakening_logo.png)  
 
 This inventory library is used to easily create/modify Minecraft inventories.<br>
@@ -46,7 +46,8 @@ Here are some snapshots of inventories created with our API:
 + JavaDocs
 
 ## Contribute
-**Note:** this project is currently **not** under active development by **our team**!<br>
+**Note:** this project is currently under active development by **our team**!<br>
+We are pushing updates here, if we successfully updated and tested our own private repository <br>
 If we alter the code in our main repo we will share the updates here.<br>
 If you want to contribute to this awesome project please use GitHub's [Pull request](https://github.com/LegendOnline/InventoryAPI/compare)
 feature.<br>
