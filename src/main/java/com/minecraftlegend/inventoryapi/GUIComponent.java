@@ -1,10 +1,10 @@
 package com.minecraftlegend.inventoryapi;
 
+
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
-
 
 /**
  * @Author Sauerbier | Jan
@@ -14,8 +14,8 @@ import java.util.List;
 public interface GUIComponent extends Listener, Cloneable {
 
 
-    default void registerNativeListeners(JavaPlugin plugin) {
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    default void registerNativeListeners( JavaPlugin plugin) {
+        plugin.getServer().getPluginManager().registerEvents( this, plugin );
     }
 
 
@@ -25,18 +25,63 @@ public interface GUIComponent extends Listener, Cloneable {
     default void postInit() {
     }
 
-    void addEvent(GUIEvent event);
+    /**
+     * Adds gui events to this component.
+     * All Events will be specified for this component
+     * @param event to register
+     */
+    void addEvent( GUIEvent event );
 
-    void removeEvent(GUIEvent event);
+    /**
+     * Removes an earlier registered event
+     * @param event to remove
+     */
+    void removeEvent( GUIEvent event );
 
+    /**
+     *
+     * @param event is fired globalized (like a normal event listener) therefor gui components will be null
+     */
+    void addGlobalEvent( GUIEvent event );
+
+    /**
+     * Removes an earlier registered global event
+     * @param event to remove
+     */
+    void removeGlobalEvent( GUIEvent event );
+
+    /**
+     *
+     * @return all global events
+     */
+    List<GUIEvent> getGlobalEvents();
+
+    /**
+     *
+     * @return all registered events for this component
+     */
     List<GUIEvent> getEvents();
 
 
+    /**
+     * Locks this component
+     * -> if this is an Inventory, the whole inventory will be locked and no items can be moved
+     * -> if this is an gui element, this specific element will be locked
+     * Note: in most cases components are already locked by default
+     */
     void lock();
 
+    /**
+     * unlocks this component
+     */
     void unlock();
 
+    /**
+     *
+     * @return the current lock state of this component
+     */
     boolean isLocked();
+
     Object clone();
 
 }

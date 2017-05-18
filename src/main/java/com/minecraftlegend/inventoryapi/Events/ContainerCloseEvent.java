@@ -10,7 +10,13 @@ import org.bukkit.entity.HumanEntity;
  * All rights reserved.
  **/
 public class ContainerCloseEvent extends ContainerOpenEvent {
-    public ContainerCloseEvent( GUIContainer container, HumanEntity player) {
-        super(container, player);
+
+    /**
+     * This event is triggered whenever a container is closed
+     * @param container the closed container
+     * @param player the player who triggered this event
+     */
+    public ContainerCloseEvent( GUIContainer container, HumanEntity player ) {
+        super( container, player );
     }
 }

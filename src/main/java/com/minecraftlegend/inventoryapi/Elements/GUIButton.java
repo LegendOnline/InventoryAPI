@@ -9,22 +9,23 @@ import org.bukkit.inventory.ItemStack;
  * All rights reserved.
  **/
 public class GUIButton extends GUILabel {
+
     private boolean lock = true;
 
-    public GUIButton(String title) {
-        super(title);
+    public GUIButton( String title ) {
+        super( title );
     }
 
-    public GUIButton(ItemStack item) {
-        super(item);
+    public GUIButton( ItemStack item ) {
+        super( item );
     }
 
-    public GUIButton(String title, Material icon) {
-        super(title, icon);
+    public GUIButton( String title, Material icon ) {
+        super( title, icon );
     }
 
-    public GUIButton(String title,Material icon,byte type){
-        super(title,icon,type);
+    public GUIButton( String title, Material icon, byte type ) {
+        super( title, icon, type );
     }
 
     @Override

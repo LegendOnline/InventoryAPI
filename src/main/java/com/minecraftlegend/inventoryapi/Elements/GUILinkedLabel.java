@@ -8,20 +8,21 @@ import org.bukkit.Material;
  * All rights reserved.
  **/
 public class GUILinkedLabel<T> extends GUILabel {
+
     private T element;
 
-    public GUILinkedLabel(String title, T element) {
-        super(title);
+    public GUILinkedLabel( String title, T element ) {
+        super( title );
         this.element = element;
     }
 
-    public GUILinkedLabel(String title, Material icon, T element) {
-        super(title, icon);
+    public GUILinkedLabel( String title, Material icon, T element ) {
+        super( title, icon );
         this.element = element;
     }
 
-    public GUILinkedLabel(String title, Material icon, byte type, T element) {
-        super(title, icon, type);
+    public GUILinkedLabel( String title, Material icon, byte type, T element ) {
+        super( title, icon, type );
         this.element = element;
     }
 
@@ -29,7 +30,7 @@ public class GUILinkedLabel<T> extends GUILabel {
         return element;
     }
 
-    public void setElement(T element) {
+    public void setElement( T element ) {
         this.element = element;
     }
 }

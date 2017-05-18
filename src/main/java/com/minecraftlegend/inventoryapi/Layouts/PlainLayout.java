@@ -13,29 +13,30 @@ import org.bukkit.event.inventory.InventoryType;
  **/
 public class PlainLayout implements GUILayout {
 
-    private Vector2i size = new Vector2i(-1,-1);
+    private Vector2i size = new Vector2i( -1, -1 );
     private int invSize;
     private InventoryType type;
 
-    public PlainLayout(){}
+    public PlainLayout() {
+    }
 
-    public PlainLayout(InventoryType type){
+    public PlainLayout( InventoryType type ) {
         this.type = type;
     }
 
-    public PlainLayout(Vector2i size){
+    public PlainLayout( Vector2i size ) {
         this.size = size;
         invSize = size.getX() * size.getY();
     }
 
-    public PlainLayout(Vector2i size, InventoryType type) {
+    public PlainLayout( Vector2i size, InventoryType type ) {
         this.size = size;
         this.type = type;
         invSize = size.getX() * size.getY();
     }
 
     @Override
-    public void apply(GUIContainer container) {
+    public void apply( GUIContainer container ) {
         invSize = container.getInventory().getSize();
         type = container.getInventory().getType();
     }

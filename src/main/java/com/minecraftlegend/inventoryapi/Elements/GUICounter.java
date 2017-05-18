@@ -19,73 +19,68 @@ import java.util.List;
  * @Copyright 2016 by Jan Hof
  * All rights reserved.
  **/
-public class GUICounter  implements GUIElement {
+public class GUICounter implements GUIElement {
 
-    private Vector2i position,size;
+    private Vector2i position, size;
     private GUIContainer parent;
     private List<GUIEvent> events = new ArrayList<>();
     private int count = 1, steps = 1;
     private GUILabel label;
 
-    public GUICounter(){
-        label = new GUILabel("§a" + count, Material.REDSTONE);
-        label.setPosition(position);
-        label.setAmount(count);
-        addEvent(new GUIEvent() {
+    public GUICounter() {
+        label = new GUILabel( "§a" + count, Material.REDSTONE );
+        label.setPosition( position );
+        label.setAmount( count );
+        addEvent( new GUIEvent() {
             @Override
-            public void onClick(ComponentClickEvent event) {
-                if(event.getClick() == ClickType.LEFT){
+            public void onClick( ComponentClickEvent event ) {
+                if ( event.getClick() == ClickType.LEFT ) {
                     count += steps;
-                    if(count < 64){
-                        label.setAmount(count);
-                        label.setTitle("§a" + GUICounter.this.count);
+                    if ( count < 64 ) {
+                        label.setAmount( count );
+                        label.setTitle( "§a" + GUICounter.this.count );
                         label.draw();
                     }
-                }else if(event.getClick() == ClickType.RIGHT){
+                }
+                else if ( event.getClick() == ClickType.RIGHT ) {
                     count -= steps;
-                    if(count > 0){
-                        label.setAmount(count);
-                        label.setTitle("§a" + GUICounter.this.count);
+                    if ( count > 0 ) {
+                        label.setAmount( count );
+                        label.setTitle( "§a" + GUICounter.this.count );
                         label.draw();
                     }
                 }
             }
-        });
+        } );
     }
 
-    public GUICounter(int count, int steps){
+    public GUICounter( int count, int steps ) {
         this.count = count;
         this.steps = steps;
-        label = new GUILabel("§a" + count, Material.REDSTONE);
-        label.setPosition(position);
-        label.setAmount(count);
-        addEvent(new GUIEvent() {
+        label = new GUILabel( "§a" + count, Material.REDSTONE );
+        label.setPosition( position );
+        label.setAmount( count );
+        addEvent( new GUIEvent() {
             @Override
-            public void onClick(ComponentClickEvent event) {
-                System.out.println("triggered click");
-                if(event.getClick() == ClickType.LEFT){
+            public void onClick( ComponentClickEvent event ) {
+                if ( event.getClick() == ClickType.LEFT ) {
                     GUICounter.this.count += steps;
-                    if(GUICounter.this.count < 64){
-                        label.setAmount(GUICounter.this.count);
-                        label.setTitle("§a" + GUICounter.this.count);
+                    if ( GUICounter.this.count < 64 ) {
+                        label.setAmount( GUICounter.this.count );
+                        label.setTitle( "§a" + GUICounter.this.count );
                         label.draw();
                     }
-                }else if(event.getClick() == ClickType.RIGHT){
+                }
+                else if ( event.getClick() == ClickType.RIGHT ) {
                     GUICounter.this.count -= steps;
-                    if(GUICounter.this.count > 0){
-                        label.setAmount(GUICounter.this.count);
-                        label.setTitle("§a" + GUICounter.this.count);
+                    if ( GUICounter.this.count > 0 ) {
+                        label.setAmount( GUICounter.this.count );
+                        label.setTitle( "§a" + GUICounter.this.count );
                         label.draw();
                     }
                 }
             }
-        });
-    }
-
-    @Override
-    public void setParent(GUIComponent parent) {
-        this.parent = (GUIContainer) parent;
-        ((GUIContainer) parent).add(label);
+        } );
     }
 
     @Override
@@ -94,24 +89,30 @@ public class GUICounter  implements GUIElement {
     }
 
     @Override
+    public void setParent( GUIComponent parent ) {
+        this.parent = (GUIContainer) parent;
+        ( (GUIContainer) parent ).add( label );
+    }
+
+    @Override
     public Vector2i getSize() {
         return size;
     }
 
     @Override
-    public void setSize(Vector2i dimension) {
+    public void setSize( Vector2i dimension ) {
         this.size = dimension;
-    }
-
-    @Override
-    public void setPosition(Vector2i dimension) {
-        this.position = dimension;
-        label.setPosition(dimension);
     }
 
     @Override
     public Vector2i getPosition() {
         return position;
+    }
+
+    @Override
+    public void setPosition( Vector2i dimension ) {
+        this.position = dimension;
+        label.setPosition( dimension );
     }
 
     @Override
@@ -130,13 +131,28 @@ public class GUICounter  implements GUIElement {
     }
 
     @Override
-    public void addEvent(GUIEvent event) {
-        events.add(event);
+    public void addEvent( GUIEvent event ) {
+        events.add( event );
     }
 
     @Override
-    public void removeEvent(GUIEvent event) {
-        events.remove(event);
+    public void removeEvent( GUIEvent event ) {
+        events.remove( event );
+    }
+
+    @Override
+    public void addGlobalEvent( GUIEvent event ) {
+        parent.addGlobalEvent( event );
+    }
+
+    @Override
+    public void removeGlobalEvent( GUIEvent event ) {
+        parent.removeGlobalEvent( event);
+    }
+
+    @Override
+    public List<GUIEvent> getGlobalEvents() {
+        return parent.getGlobalEvents();
     }
 
     @Override
@@ -163,7 +179,8 @@ public class GUICounter  implements GUIElement {
     public Object clone() {
         try {
             super.clone();
-        } catch (CloneNotSupportedException e) {
+        }
+        catch ( CloneNotSupportedException e ) {
             e.printStackTrace();
         }
         return null;
@@ -173,11 +190,11 @@ public class GUICounter  implements GUIElement {
         return count;
     }
 
-    public void setCount(int count) {
+    public void setCount( int count ) {
         this.count = count;
-        if(count < 64 && count > 0){
-            label.setAmount(count);
-            label.setTitle("§a" + GUICounter.this.count);
+        if ( count < 64 && count > 0 ) {
+            label.setAmount( count );
+            label.setTitle( "§a" + GUICounter.this.count );
             label.draw();
         }
     }
