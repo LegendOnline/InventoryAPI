@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemStack;
  * @Copyright 2016 by Jan Hof
  * All rights reserved.
  **/
-public class ComponentClickEvent implements Event {
+public class ComponentClickEvent implements EventWrapper {
 
     private GUIContainer gui;
     private GUIComponent component;

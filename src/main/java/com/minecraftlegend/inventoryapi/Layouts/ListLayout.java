@@ -131,9 +131,9 @@ public class ListLayout implements GUILayout {
         if ( invNum > 0 ) {
             GUIButton first = new GUIButton( "§a»", Material.ARROW );
             first.setPosition( new Vector2i( 6, rows ) );
-            first.addEvent( new GUIEvent<ComponentClickEvent>() {
+            first.addEvent( new GUIEvent() {
                 @Override
-                public void call( ComponentClickEvent event ) {
+                public void onClick( ComponentClickEvent event ) {
                     subs.get( 1 ).draw( (Player) event.getPlayer() );
                 }
             } );

@@ -33,9 +33,9 @@ public class GUInput implements GUIElement {
 
 
     private void setup(){
-        addGlobalEvent( new GUIEvent<ComponentClickEvent>() {
+        addGlobalEvent( new GUIEvent() {
             @Override
-            public void call( ComponentClickEvent event ) {
+            public void onClick( ComponentClickEvent event ) {
                 if ( parent.getInventory() == event.getGui().getInventory()) {
                     new BukkitRunnable() {
                         @Override
@@ -76,9 +76,9 @@ public class GUInput implements GUIElement {
         });
 
 
-        parent.addEvent( new GUIEvent<ContainerCloseEvent>() {
+        parent.addEvent( new GUIEvent() {
             @Override
-            public void call( ContainerCloseEvent event ) {
+            public void onClose( ContainerCloseEvent event ) {
                     if ( input != null && input.getType() != Material.AIR ) {
                         HashMap<Integer, ItemStack> leftover = event.getPlayer().getInventory().addItem( input );
                         if ( !leftover.isEmpty() ) {

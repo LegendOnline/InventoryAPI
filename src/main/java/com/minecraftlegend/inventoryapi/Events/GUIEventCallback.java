@@ -5,7 +5,7 @@ package com.minecraftlegend.inventoryapi.Events;
  * @Copyright 2016 by Jan Hof
  * All rights reserved.
  **/
-public interface GUIEventCallback<T extends Event> {
+public interface GUIEventCallback<T extends EventWrapper> {
 
     void call( T event );
 

@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
  * @Copyright 2017 by Jan Hof
  * All rights reserved.
  **/
-public class ComponentMoveEvent implements Event {
+public class ComponentMoveEvent implements EventWrapper {
 
     private GUIContainer gui;
     private ItemStack item;
