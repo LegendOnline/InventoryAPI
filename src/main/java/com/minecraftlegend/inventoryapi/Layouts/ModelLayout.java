@@ -49,8 +49,8 @@ public class ModelLayout extends ExactLayout {
      */
     public ModelLayout( String layout ) {
         this.layout = layout;
-        totalSize = getMaxY() * 9;
         dim = new Vector2i( 9, getMaxY() );
+        totalSize = dim.getY() * 9;
     }
 
     @Override
