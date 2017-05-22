@@ -205,11 +205,11 @@ public class ModelLayout extends ExactLayout {
         for ( String op : ops ) {
             if ( op.matches( "\\d:\\d=." ) ) {
                 Vector2i v = parseCoordinates( op.split( "=" )[0] );
-                if ( v.getY() > max ) max = v.getY();
+                if ( v.getY() + 1 > max ) max = v.getY() + 1;
             }
             else if ( op.matches( "\\d:\\d-\\d=." ) ) {
                 Vector2i v = parseCoordinates( op.split( "-" )[0] );
-                if ( v.getY() > max ) max = v.getY();
+                if ( v.getY() + 1 > max ) max = v.getY() + 1;
             }
             else if ( op.matches( "\\d:\\d\\|\\d=." ) ) {
                 int y = Integer.parseInt( op.split( "\\|" )[1].split( "=" )[0] );
@@ -219,7 +219,7 @@ public class ModelLayout extends ExactLayout {
                 Vector2i v = parseCoordinates( op.split( "#" )[0] );
                 Vector2i v1 = parseCoordinates( op.split( "#" )[1].split( "=" )[0] );
                 Vector2i maxV = v.max( v1 );
-                if ( maxV.getY() > max ) max = maxV.getY();
+                if ( maxV.getY() + 1 > max ) max = maxV.getY() + 1;
             }
             else if ( op.matches( "\\*=." ) ) {
                 continue;
