@@ -5,6 +5,6 @@ package com.minecraftlegend.inventoryapi.Events;
  * @Copyright 2016 by Jan Hof
  * All rights reserved.
  **/
-public interface Event {
+public interface EventWrapper {
 
 }
