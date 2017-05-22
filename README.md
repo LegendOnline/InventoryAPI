@@ -36,8 +36,8 @@ Basically, if you know Java Swing, you know this InventoryAPI<br>
 But please take a look at our [Wiki](https://github.com/LegendOnline/InventoryAPI/wiki)
 Here are some snapshots of inventories created with our API:
 
-##Changelog
-###Version 1.1:
+## Changelog
+### Version 1.1:
 + added TextInput support trough Anvil gui's
 + added events to handle text input
 + added GUInput element to support item inputs
