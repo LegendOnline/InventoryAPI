@@ -14,7 +14,7 @@ import java.util.Map;
  * @Copyright 2016 by Jan Hof
  * All rights reserved.
  **/
-public class ComponentDragEvent {
+public class ComponentDragEvent implements Event{
     private GUIContainer gui;
     private GUIComponent component;
     private Map<Integer,ItemStack> items;

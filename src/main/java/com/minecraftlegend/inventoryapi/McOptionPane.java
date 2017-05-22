@@ -4,7 +4,6 @@ package com.minecraftlegend.inventoryapi;
 import com.minecraftlegend.inventoryapi.Elements.GUIButton;
 import com.minecraftlegend.inventoryapi.Elements.GUILabel;
 import com.minecraftlegend.inventoryapi.Events.ComponentClickEvent;
-import com.minecraftlegend.inventoryapi.Events.ContainerCloseEvent;
 import com.minecraftlegend.inventoryapi.Events.GUIEventCallback;
 import com.minecraftlegend.inventoryapi.Layouts.ModelLayout;
 import com.minecraftlegend.inventoryapi.utils.Vector2i;
@@ -54,33 +53,15 @@ public class McOptionPane {
         accept.setPosition( new Vector2i( 2, 1 ) );
         GUIButton deny = new GUIButton( denyLabel, Material.WOOL, (byte) 14 );
         deny.setPosition( new Vector2i( 6, 1 ) );
-        accept.addEvent( new GUIEvent() {
-            @Override
-            public void onClick( ComponentClickEvent event ) {
-                if ( onConfirm != null ) onConfirm.call( event );
-            }
-        } );
-        deny.addEvent( new GUIEvent() {
-            @Override
-            public void onClick( ComponentClickEvent event ) {
-                if ( onDeny != null ) onDeny.call( event );
-            }
-        } );
+
+        accept.addEvent( (GUIEvent<ComponentClickEvent>) onConfirm::call );
+        deny.addEvent( (GUIEvent<ComponentClickEvent>) onDeny::call );
+
         gui.add( accept );
         gui.add( deny );
 
         if ( prev.getType() != InventoryType.CRAFTING ) {
-            gui.addEvent( new GUIEvent() {
-                @Override
-                public void onClose( ContainerCloseEvent event ) {
-                    Bukkit.getScheduler().runTaskLater( plugin, new Runnable() {
-                        @Override
-                        public void run() {
-
-                        }
-                    }, 1 );
-                }
-            } );
+            gui.addEvent( event -> Bukkit.getScheduler().runTaskLater( plugin, () -> {}, 1 ) );
         }
         gui.draw( player );
     }

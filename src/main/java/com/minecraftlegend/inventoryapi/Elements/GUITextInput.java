@@ -66,21 +66,23 @@ public class GUITextInput implements GUIElement {
     public void postInit() {
         anvil = new GUIAnvil(parent.getPlugin());
 
-        addEvent( new GUIEvent() {
+        addEvent( new GUIEvent<ComponentClickEvent>() {
             @Override
-            public void onClick( ComponentClickEvent event ) {
+            public void call( ComponentClickEvent event ) {
                 anvil.setSlot( new GUILabel( "Enter Text here", Material.PAPER ), AnvilSlot.INPUT_LEFT );
-                anvil.addEvent( new AnvilEvent() {
+                anvil.addEvent( new AnvilEvent<AnvilResultEvent>() {
                     @Override
-                    public void onResultClick( AnvilResultEvent event ) {
+                    public void call( AnvilResultEvent event ) {
                         event.getAnvil().clearSlot( AnvilSlot.INPUT_LEFT );
                         event.getAnvil().clearSlot( AnvilSlot.INPUT_RIGHT );
                         event.getAnvil().clearSlot( AnvilSlot.OUTPUT);
                         anvil.dispose( event.getPlayer() );
                     }
+                } );
 
+                anvil.addEvent( new GUIEvent<ContainerCloseEvent>() {
                     @Override
-                    public void onClose( ContainerCloseEvent event ) {
+                    public void call( ContainerCloseEvent event ) {
                         if(event.getContainer() instanceof GUIAnvil){
                             GUIAnvil anvil = (GUIAnvil) event.getContainer();
                             anvil.clearSlot( AnvilSlot.INPUT_LEFT );

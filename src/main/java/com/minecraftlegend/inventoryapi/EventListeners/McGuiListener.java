@@ -39,7 +39,7 @@ public class McGuiListener implements Listener {
     public void onClick( InventoryClickEvent event ) {
         if(event.getClickedInventory() == null) return;
 
-        globalEvents.forEach( e -> e.onClick( new ComponentClickEvent( gui, null, event.getCurrentItem(), event.getSlot(), event.getWhoClicked(), event.getClick())));
+        globalEvents.forEach( e -> e.call( new ComponentClickEvent( gui, null, event.getCurrentItem(), event.getSlot(), event.getWhoClicked(), event.getClick())));
 
         if ( event.getInventory().equals( gui.getInventory() ) ) {
             event.setCancelled( gui.isLocked() );
@@ -47,7 +47,7 @@ public class McGuiListener implements Listener {
                 if ( guiComponent instanceof GUIElement ) {
                     if ( ( (GUIElement) guiComponent ).getPosition().toInventoryPosition() == event.getRawSlot() ) {
                         event.setCancelled( guiComponent.isLocked() );
-                        guiComponent.getEvents().forEach( e -> e.onClick( new ComponentClickEvent( gui, guiComponent, event.getCurrentItem(), event.getSlot(), event.getWhoClicked(), event.getClick() ) ) );
+                        guiComponent.getEvents().forEach( e -> e.call( new ComponentClickEvent( gui, guiComponent, event.getCurrentItem(), event.getSlot(), event.getWhoClicked(), event.getClick() ) ) );
                         //don't return because there could be multiple elements at the same slot e.g. GUIButton (includes GUILabel)
                     }
                 }
@@ -57,7 +57,7 @@ public class McGuiListener implements Listener {
 
     @EventHandler
     public void onDrag( InventoryDragEvent event ) {
-        globalEvents.forEach( e -> e.onDrag( new ComponentDragEvent( gui, null, event.getNewItems(), event.getWhoClicked(), event.getType() ) ));
+        globalEvents.forEach( e -> e.call( new ComponentDragEvent( gui, null, event.getNewItems(), event.getWhoClicked(), event.getType() ) ));
 
         if ( event.getInventory().equals( gui.getInventory() ) ) {
             event.setCancelled( gui.isLocked() );
@@ -65,7 +65,7 @@ public class McGuiListener implements Listener {
                 if ( guiComponent instanceof GUIElement ) {
                     if (event.getRawSlots().contains(((GUIElement)guiComponent).getPosition().toInventoryPosition())) {
                         event.setCancelled( guiComponent.isLocked() );
-                        guiComponent.getEvents().forEach( e -> e.onDrag( new ComponentDragEvent( gui, guiComponent, event.getNewItems(), event.getWhoClicked(), event.getType() ) ) );
+                        guiComponent.getEvents().forEach( e -> e.call( new ComponentDragEvent( gui, guiComponent, event.getNewItems(), event.getWhoClicked(), event.getType() ) ) );
                         //don't return because there could be multiple elements at the same slot e.g. GUIButton (includes GUILabel)
                     }
                 }
@@ -76,14 +76,14 @@ public class McGuiListener implements Listener {
 
     @EventHandler
     public void onItemMove( InventoryMoveItemEvent event ) {
-        globalEvents.forEach( e -> e.onMove( new ComponentMoveEvent( gui, event.getItem()) ) );
+        globalEvents.forEach( e -> e.call( new ComponentMoveEvent( gui, event.getItem()) ) );
 
         if ( event.getDestination().equals( gui.getInventory() ) ) {
             event.setCancelled( gui.isLocked() );
             for ( GUIComponent guiComponent : gui.getComponents() ) {
                 if ( guiComponent instanceof GUIElement ) {
                     event.setCancelled( guiComponent.isLocked() );
-                        guiComponent.getEvents().forEach( e -> e.onMove( new ComponentMoveEvent( gui, event.getItem()) ) );
+                        guiComponent.getEvents().forEach( e -> e.call( new ComponentMoveEvent( gui, event.getItem()) ) );
                         return;
                 }
             }
@@ -93,16 +93,16 @@ public class McGuiListener implements Listener {
 
     @EventHandler
     public void onOpen( InventoryOpenEvent event ) {
-        globalEvents.forEach( e -> e.onOpen(  new ContainerOpenEvent( gui, event.getPlayer() ) ) );
+        globalEvents.forEach( e -> e.call(  new ContainerOpenEvent( gui, event.getPlayer() ) ) );
         if ( event.getInventory().equals( gui.getInventory() ) )
-            gui.getEvents().forEach( e -> e.onOpen( new ContainerOpenEvent( gui, event.getPlayer() ) ) );
+            gui.getEvents().forEach( e -> e.call( new ContainerOpenEvent( gui, event.getPlayer() ) ) );
     }
 
     @EventHandler
     public void onClose( InventoryCloseEvent event ) {
-        globalEvents.forEach( e -> e.onClose( new ContainerCloseEvent( gui, event.getPlayer() ) ) );
+        globalEvents.forEach( e -> e.call( new ContainerCloseEvent( gui, event.getPlayer() ) ) );
         if ( event.getInventory().equals( gui.getInventory() ) ) {
-            gui.getEvents().forEach( e -> e.onClose( new ContainerCloseEvent( gui, event.getPlayer() ) ) );
+            gui.getEvents().forEach( e -> e.call( new ContainerCloseEvent( gui, event.getPlayer() ) ) );
         }
     }
 

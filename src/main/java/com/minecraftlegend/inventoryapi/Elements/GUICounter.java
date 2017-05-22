@@ -31,9 +31,9 @@ public class GUICounter implements GUIElement {
         label = new GUILabel( "§a" + count, Material.REDSTONE );
         label.setPosition( position );
         label.setAmount( count );
-        addEvent( new GUIEvent() {
+        addEvent( new GUIEvent<ComponentClickEvent>() {
             @Override
-            public void onClick( ComponentClickEvent event ) {
+            public void call( ComponentClickEvent event ) {
                 if ( event.getClick() == ClickType.LEFT ) {
                     count += steps;
                     if ( count < 64 ) {
@@ -60,9 +60,9 @@ public class GUICounter implements GUIElement {
         label = new GUILabel( "§a" + count, Material.REDSTONE );
         label.setPosition( position );
         label.setAmount( count );
-        addEvent( new GUIEvent() {
+        addEvent( new GUIEvent<ComponentClickEvent>() {
             @Override
-            public void onClick( ComponentClickEvent event ) {
+            public void call( ComponentClickEvent event ) {
                 if ( event.getClick() == ClickType.LEFT ) {
                     GUICounter.this.count += steps;
                     if ( GUICounter.this.count < 64 ) {

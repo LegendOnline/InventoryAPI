@@ -9,7 +9,7 @@ import org.bukkit.entity.HumanEntity;
  * @Copyright 2017 by Jan Hof
  * All rights reserved.
  **/
-public class InputChangeEvent implements EventWrapper {
+public class InputChangeEvent implements Event {
 
     private InputActionType action;
     private GUIComponent component;

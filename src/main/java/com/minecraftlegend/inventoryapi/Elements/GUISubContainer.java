@@ -43,9 +43,9 @@ public class GUISubContainer extends McGui {
         this.openParentOnClose = openParentOnClose;
         initButtons();
 
-        close = new GUIEvent() {
+        close = new GUIEvent<ContainerCloseEvent>() {
             @Override
-            public void onClose( ContainerCloseEvent event ) {
+            public void call( ContainerCloseEvent event ) {
                 Bukkit.getScheduler().runTaskLater( plugin, new Runnable() {
                     @Override
                     public void run() {
@@ -65,9 +65,9 @@ public class GUISubContainer extends McGui {
             child.setParent( this );
             if ( useNextButton ) {
                 add( nextButton );
-                nextButton.addEvent( new GUIEvent() {
+                nextButton.addEvent( new GUIEvent<ComponentClickEvent>() {
                     @Override
-                    public void onClick( ComponentClickEvent event ) {
+                    public void call( ComponentClickEvent event ) {
                         drawChild( (Player) event.getPlayer() );
                     }
                 } );
@@ -98,9 +98,9 @@ public class GUISubContainer extends McGui {
             child.setParent( this );
             if ( useNextButton ) {
                 add( nextButton );
-                nextButton.addEvent( new GUIEvent() {
+                nextButton.addEvent( new GUIEvent<ComponentClickEvent>() {
                     @Override
-                    public void onClick( ComponentClickEvent event ) {
+                    public void call( ComponentClickEvent event ) {
                         drawChild( (Player) event.getPlayer() );
                     }
                 } );
@@ -126,9 +126,9 @@ public class GUISubContainer extends McGui {
         if ( useExitButton ) {
             initButtons();
             add( exitButton );
-            exitButton.addEvent( new GUIEvent() {
+            exitButton.addEvent( new GUIEvent<ComponentClickEvent>() {
                 @Override
-                public void onClick( ComponentClickEvent event ) {
+                public void call( ComponentClickEvent event ) {
                     parent.draw( (Player) event.getPlayer() );
                 }
             } );
@@ -144,9 +144,9 @@ public class GUISubContainer extends McGui {
         this.parent = parent;
         if ( this.openParentOnClose ) {
             removeEvent( close );
-            addEvent( close = new GUIEvent() {
+            addEvent( close = new GUIEvent<ContainerCloseEvent>() {
                 @Override
-                public void onClose( ContainerCloseEvent event ) {
+                public void call( ContainerCloseEvent event ) {
                     Bukkit.getScheduler().runTaskLater( getPlugin(), new Runnable() {
                         @Override
                         public void run() {
@@ -167,9 +167,9 @@ public class GUISubContainer extends McGui {
             child.setParent( this );
             if ( useNextButton ) {
                 add( nextButton );
-                nextButton.addEvent( new GUIEvent() {
+                nextButton.addEvent( new GUIEvent<ComponentClickEvent>() {
                     @Override
-                    public void onClick( ComponentClickEvent event ) {
+                    public void call( ComponentClickEvent event ) {
                         drawChild( (Player) event.getPlayer() );
                     }
                 } );
@@ -241,9 +241,9 @@ public class GUISubContainer extends McGui {
             add( nextButton );
             nextButton.draw();
 
-            nextButton.addEvent( new GUIEvent() {
+            nextButton.addEvent( new GUIEvent<ComponentClickEvent>() {
                 @Override
-                public void onClick( ComponentClickEvent event ) {
+                public void call( ComponentClickEvent event ) {
                     removeEvent( close );
                     child.draw( (Player) event.getPlayer() );
                     addEvent( close );

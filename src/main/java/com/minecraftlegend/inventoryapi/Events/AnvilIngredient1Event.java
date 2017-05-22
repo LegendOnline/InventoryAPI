@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
  * @Copyright 2016 by Jan Hof
  * All rights reserved.
  **/
-public class AnvilIngredient1Event implements EventWrapper {
+public class AnvilIngredient1Event implements Event {
 
     private GUIAnvil anvil;
     private Player player;

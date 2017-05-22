@@ -44,7 +44,7 @@ public class GuiAnvilListener implements Listener {
                 if ( guiComponent instanceof GUIElement ) {
                     event.setCancelled( guiComponent.isLocked() );
                     if ( ( (GUIElement) guiComponent ).getNative().equals( event.getCurrentItem() ) ) {
-                        guiComponent.getEvents().forEach( e -> e.onClick( new ComponentClickEvent( gui, guiComponent, event.getCurrentItem(), event.getSlot(), event.getWhoClicked(), event.getClick() ) ) );
+                        guiComponent.getEvents().forEach( e -> e.call( new ComponentClickEvent( gui, guiComponent, event.getCurrentItem(), event.getSlot(), event.getWhoClicked(), event.getClick() ) ) );
                     }
                 }
             }
@@ -57,14 +57,14 @@ public class GuiAnvilListener implements Listener {
             gui.getEvents().forEach( e -> {
 
                 if ( event.getRawSlot() == 0 && e instanceof AnvilEvent ) {
-                    ( (AnvilEvent) e ).onIngredient1Click( new AnvilIngredient1Event( gui, (Player) event.getWhoClicked() ) );
+                    ( (AnvilEvent) e ).call( new AnvilIngredient1Event( gui, (Player) event.getWhoClicked() ) );
                 }
                 else if ( event.getRawSlot() == 1 && e instanceof AnvilEvent ) {
-                    ( (AnvilEvent) e ).onIngredient2Click( new AnvilIngredient2Event( gui, (Player) event.getWhoClicked() ) );
+                    ( (AnvilEvent) e ).call( new AnvilIngredient2Event( gui, (Player) event.getWhoClicked() ) );
                 }
                 else if ( event.getRawSlot() == 2 && e instanceof AnvilEvent ) {
                     if(event.getCurrentItem().getItemMeta() == null) return;
-                    ((AnvilEvent)e).onResultClick(new AnvilResultEvent(gui, (Player) event.getWhoClicked(), event.getCurrentItem().getItemMeta().getDisplayName() ));
+                    e.call(new AnvilResultEvent(gui, (Player) event.getWhoClicked(), event.getCurrentItem().getItemMeta().getDisplayName() ));
                 }
             } );
         }
@@ -79,7 +79,7 @@ public class GuiAnvilListener implements Listener {
                 if ( guiComponent instanceof GUIElement ) {
                     event.setCancelled( guiComponent.isLocked() );
                     if ( ( (GUIElement) guiComponent ).getNative().equals( event.getCursor() ) ) {
-                        guiComponent.getEvents().forEach( e -> e.onDrag(new ComponentDragEvent( gui, guiComponent, event.getNewItems(), event.getWhoClicked(), event.getType())));
+                        guiComponent.getEvents().forEach( e -> e.call(new ComponentDragEvent( gui, guiComponent, event.getNewItems(), event.getWhoClicked(), event.getType())));
                         return;
                     }
                 }
@@ -91,13 +91,13 @@ public class GuiAnvilListener implements Listener {
     @EventHandler
     public void onOpen( InventoryOpenEvent event ) {
         if ( event.getInventory().equals( gui.getInventory() ) )
-            gui.getEvents().forEach( e -> e.onOpen( new ContainerOpenEvent( gui, event.getPlayer() ) ) );
+            gui.getEvents().forEach( e -> e.call( new ContainerOpenEvent( gui, event.getPlayer() ) ) );
     }
 
     @EventHandler
     public void onClose( InventoryCloseEvent event ) {
         if ( event.getInventory().equals( gui.getInventory() ) ) {
-            gui.getEvents().forEach( e -> e.onClose( new ContainerCloseEvent( gui, event.getPlayer() ) ) );
+            gui.getEvents().forEach( e -> e.call( new ContainerCloseEvent( gui, event.getPlayer() ) ) );
         }
     }
 

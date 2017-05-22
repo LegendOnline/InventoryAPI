@@ -9,7 +9,7 @@ import org.bukkit.entity.HumanEntity;
  * @Copyright 2016 by Jan Hof
  * All rights reserved.
  **/
-public class ContainerOpenEvent implements EventWrapper {
+public class ContainerOpenEvent implements Event {
 
     private GUIContainer container;
     private HumanEntity player;
