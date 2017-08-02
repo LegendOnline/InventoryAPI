@@ -77,7 +77,8 @@ public class ItemBuilder {
      */
     public ItemBuilder lore(String str){
         Validate.notNull( str , "Lore is null");
-        meta.getLore().add( str );
+        for(String lore : str.split("\n"))
+            meta.getLore().add( lore );
         item.setItemMeta( meta );
         return this;
     }
