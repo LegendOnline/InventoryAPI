@@ -29,7 +29,7 @@ public class ItemBuilder {
      * Creates an ItemBuilder
      */
     public ItemBuilder(){
-        this(null);
+        this(new ItemStack( Material.STONE ));
     }
 
 
@@ -45,6 +45,15 @@ public class ItemBuilder {
             item.setItemMeta( meta );
         }
 
+    }
+
+    /**
+     * Creates an ItemBuilder
+     * @param item as preset
+     */
+    public ItemBuilder(ItemStack item) {
+        this.item = item;
+        this.meta = item.getItemMeta();
     }
 
     /**

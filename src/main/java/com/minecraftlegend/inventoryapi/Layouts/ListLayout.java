@@ -62,18 +62,11 @@ public class ListLayout implements GUILayout {
 
         for ( int i = invNum; i > 0; i-- ) {
             if ( i == invNum ) {
-                if ( invNum > 1 ) {
-                    subs.add( new GUISubContainer( plugin,null, container.getInventory().getTitle() + "| Seite: " + i, true, new PlainLayout( size, InventoryType.CHEST ) ) );
-                }
-                else {
-                    subs.add( new GUISubContainer( plugin, container, null, container.getInventory().getTitle() + "| Seite: " + i, true, new PlainLayout( size, InventoryType.CHEST ) ) );
-                }
-            }
-            else if ( i == 1 ) {
-                subs.add( new GUISubContainer( plugin, container, (GUISubContainer) subs.get( subs.size() - 1 ), container.getInventory().getTitle() + "| Seite: 1", true, new PlainLayout( size, InventoryType.CHEST ) ) );
-            }
-            else {
-                subs.add( new GUISubContainer( plugin, (GUISubContainer) subs.get( invNum - i - 1 ), container.getInventory().getTitle() + "| Seite: " + i, true, new PlainLayout( size, InventoryType.CHEST ) ) );
+                subs.add( new GUISubContainer(plugin,container, null, container.getInventory().getTitle() + "| Seite: " + i, true, new PlainLayout( size, InventoryType.CHEST ) ) );
+            } else if ( i <= 1 ) {
+                subs.add( new GUISubContainer(plugin, container, (GUISubContainer) subs.get( subs.size() - 1 ), container.getInventory().getTitle() + "| Seite: 1", true, new PlainLayout( size, InventoryType.CHEST ) ) );
+            } else {
+                subs.add( new GUISubContainer(plugin,container, (GUISubContainer) subs.get( invNum - i - 1 ), container.getInventory().getTitle() + "| Seite: " + i, true, new PlainLayout( size, InventoryType.CHEST ) ) );
             }
         }
 
@@ -117,6 +110,7 @@ public class ListLayout implements GUILayout {
                 }
 
                 if ( ( (GUISubContainer) inv ).getChild() != null ) {
+                    ((GUISubContainer) inv).setUseNextButton(true);
                     ( (GUISubContainer) inv ).getNextButton().dispose();
                     ( (GUISubContainer) inv ).getNextButton().setPosition( new Vector2i( 6, rows ) );
                     ItemStack next = new ItemStack( Material.ARROW );

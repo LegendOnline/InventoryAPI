@@ -18,5 +18,5 @@ public interface InputEvent extends GUIEvent {
      * therefor you do not have to evaluate, if the changed input is the one this event has been attached to
      * @param event information about the triggered event
      */
-    default void onInputChange( InputChangeEvent event ){ }
+    default void onInputChange(InputChangeEvent event){ }
 }

@@ -161,6 +161,16 @@ public class GUICounter implements GUIElement {
     }
 
     @Override
+    public void setEvents( List<GUIEvent> events ) {
+        this.events = events;
+    }
+
+    @Override
+    public void setGlobalEvents( List<GUIEvent> events ) {
+        parent.setGlobalEvents( events );
+    }
+
+    @Override
     public void lock() {
 
     }
@@ -178,7 +188,7 @@ public class GUICounter implements GUIElement {
     @Override
     public Object clone() {
         try {
-            super.clone();
+           return super.clone();
         }
         catch ( CloneNotSupportedException e ) {
             e.printStackTrace();

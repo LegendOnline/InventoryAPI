@@ -2,24 +2,14 @@ package com.minecraftlegend.inventoryapi.EventListeners;
 
 
 import com.minecraftlegend.inventoryapi.Elements.GUIAnvil;
-import com.minecraftlegend.inventoryapi.Events.AnvilEvent;
-import com.minecraftlegend.inventoryapi.Events.AnvilIngredient1Event;
-import com.minecraftlegend.inventoryapi.Events.AnvilIngredient2Event;
-import com.minecraftlegend.inventoryapi.Events.AnvilResultEvent;
-import com.minecraftlegend.inventoryapi.Events.ComponentClickEvent;
-import com.minecraftlegend.inventoryapi.Events.ComponentDragEvent;
-import com.minecraftlegend.inventoryapi.Events.ContainerCloseEvent;
-import com.minecraftlegend.inventoryapi.Events.ContainerOpenEvent;
+import com.minecraftlegend.inventoryapi.Events.*;
 import com.minecraftlegend.inventoryapi.GUIComponent;
 import com.minecraftlegend.inventoryapi.GUIElement;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.*;
 
 /**
  * @Author Sauerbier | Jan
@@ -41,10 +31,10 @@ public class GuiAnvilListener implements Listener {
         if ( event.getInventory().equals( gui.getInventory() ) ) {
             event.setCancelled( gui.isLocked() );
             for ( GUIComponent guiComponent : gui.getComponents() ) {
-                if ( guiComponent instanceof GUIElement ) {
+                if ( guiComponent instanceof GUIElement) {
                     event.setCancelled( guiComponent.isLocked() );
                     if ( ( (GUIElement) guiComponent ).getNative().equals( event.getCurrentItem() ) ) {
-                        guiComponent.getEvents().forEach( e -> e.onClick( new ComponentClickEvent( gui, guiComponent, event.getCurrentItem(), event.getSlot(), event.getWhoClicked(), event.getClick() ) ) );
+                        guiComponent.getEvents().forEach( e -> e.onClick( new ComponentClickEvent( gui, guiComponent, event.getCurrentItem(), event.getCursor(), event.getClickedInventory(), event.getSlot(), event.getRawSlot(), event.getWhoClicked(), event.getClick()) ) );
                     }
                 }
             }
@@ -56,7 +46,7 @@ public class GuiAnvilListener implements Listener {
         if ( event.getInventory().getType() == InventoryType.ANVIL ) {
             gui.getEvents().forEach( e -> {
 
-                if ( event.getRawSlot() == 0 && e instanceof AnvilEvent ) {
+                if ( event.getRawSlot() == 0 && e instanceof AnvilEvent) {
                     ( (AnvilEvent) e ).onIngredient1Click( new AnvilIngredient1Event( gui, (Player) event.getWhoClicked() ) );
                 }
                 else if ( event.getRawSlot() == 1 && e instanceof AnvilEvent ) {
@@ -98,6 +88,8 @@ public class GuiAnvilListener implements Listener {
     public void onClose( InventoryCloseEvent event ) {
         if ( event.getInventory().equals( gui.getInventory() ) ) {
             gui.getEvents().forEach( e -> e.onClose( new ContainerCloseEvent( gui, event.getPlayer() ) ) );
+            HandlerList.unregisterAll(this);
+            gui.setNativeListenerRegistered(false);
         }
     }
 

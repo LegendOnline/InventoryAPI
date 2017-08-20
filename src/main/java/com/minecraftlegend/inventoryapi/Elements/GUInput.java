@@ -1,18 +1,18 @@
 package com.minecraftlegend.inventoryapi.Elements;
 
 
-import com.minecraftlegend.inventoryapi.Events.ComponentClickEvent;
 import com.minecraftlegend.inventoryapi.Events.ContainerCloseEvent;
+import com.minecraftlegend.inventoryapi.Events.ContainerOpenEvent;
 import com.minecraftlegend.inventoryapi.Events.InputChangeEvent;
 import com.minecraftlegend.inventoryapi.Events.InputEvent;
 import com.minecraftlegend.inventoryapi.GUIComponent;
 import com.minecraftlegend.inventoryapi.GUIContainer;
 import com.minecraftlegend.inventoryapi.GUIElement;
 import com.minecraftlegend.inventoryapi.GUIEvent;
+import com.minecraftlegend.inventoryapi.utils.InventorySlotWatcher;
 import com.minecraftlegend.inventoryapi.utils.Vector2i;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,74 +24,49 @@ import java.util.List;
  * All rights reserved.
  **/
 public class GUInput implements GUIElement {
-
-
     private Vector2i position, size;
     private GUIContainer parent;
-    private ItemStack input = new ItemStack( Material.AIR, 0,(short) 0, (byte) 0);
     private List<GUIEvent> events = new ArrayList<>();
 
 
-    private void setup(){
-        addGlobalEvent( new GUIEvent() {
+    private void setup() {
+        InventorySlotWatcher[] slotWatchers = new InventorySlotWatcher[]{
+                new InventorySlotWatcher(parent.getPlugin(),parent.getInventory(), getPosition().toInventoryPosition(), this) {
+                    @Override
+                    public void onSlotUpdate(InputChangeEvent inputChangeEvent) {
+                        events
+                                .stream()
+                                .filter(InputEvent.class::isInstance)
+                                .map(InputEvent.class::cast)
+                                .forEach(event -> event.onInputChange(inputChangeEvent));
+                    }
+                }
+        };
+
+        parent.addEvent(new GUIEvent() {
             @Override
-            public void onClick( ComponentClickEvent event ) {
-                if ( parent.getInventory() == event.getGui().getInventory()) {
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
+            public void onOpen(ContainerOpenEvent event) {
+                slotWatchers[0].startListing();
+            }
 
-                            if(input != null && input.getType() != Material.AIR || parent.getInventory().getItem( position.toInventoryPosition() ) != null && parent.getInventory().getItem( position.toInventoryPosition() ).getType() != Material.AIR) {
-                                if ( input != null && input.getType() == Material.AIR && parent.getInventory().getItem( position.toInventoryPosition() ) != null && parent.getInventory().getItem( position.toInventoryPosition() ).getType() != Material.AIR ) {
+            @Override
+            public void onClose(ContainerCloseEvent event) {
+                slotWatchers[0].stopListening();
 
-                                    GUInput.this.input = parent.getInventory().getItem( position.toInventoryPosition() );
-                                    for ( GUIEvent guiEvent : events ) {
-                                        if ( guiEvent instanceof InputEvent ) {
-                                            ( (InputEvent) guiEvent ).onInputChange( new InputChangeEvent( InputChangeEvent.InputActionType.IN, GUInput.this, event.getPlayer() ) );
-                                        }
-                                    }
-                                }
-                                else if ( input != null && input.getType() != Material.AIR && parent.getInventory().getItem( position.toInventoryPosition() ) != null && parent.getInventory().getItem( position.toInventoryPosition() ).getType() != Material.AIR ) {
+                if (getItemOnSlot() != null && GUInput.this.getItemOnSlot().getType() != Material.AIR) {
+                    HashMap<Integer, ItemStack> leftover = event.getPlayer().getInventory().addItem(GUInput.this.getItemOnSlot());
 
-                                    GUInput.this.input = parent.getInventory().getItem( position.toInventoryPosition() );
-                                    for ( GUIEvent guiEvent : events ) {
-                                        if ( guiEvent instanceof InputEvent ) {
-                                            ( (InputEvent) guiEvent ).onInputChange( new InputChangeEvent( InputChangeEvent.InputActionType.CHANGE, GUInput.this, event.getPlayer() ) );
-                                        }
-                                    }
-                                }
-                                else {
-                                    GUInput.this.input = new ItemStack( Material.AIR, 0,(short) 0, (byte) 0);
-                                    for ( GUIEvent guiEvent : events ) {
-                                        if ( guiEvent instanceof InputEvent ) {
-                                            ( (InputEvent) guiEvent ).onInputChange( new InputChangeEvent( InputChangeEvent.InputActionType.OUT, GUInput.this, event.getPlayer() ) );
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }.runTaskLaterAsynchronously( parent.getPlugin(), 1L );
+                    if (!leftover.isEmpty()) {
+                        event.getPlayer().getLocation().getWorld().dropItem(event.getPlayer().getLocation(), GUInput.this.getItemOnSlot());
+                    }
                 }
             }
         });
-
-
-        parent.addEvent( new GUIEvent() {
-            @Override
-            public void onClose( ContainerCloseEvent event ) {
-                    if ( input != null && input.getType() != Material.AIR ) {
-                        HashMap<Integer, ItemStack> leftover = event.getPlayer().getInventory().addItem( input );
-                        if ( !leftover.isEmpty() ) {
-                            event.getPlayer().getLocation().getWorld().dropItem( event.getPlayer().getLocation(), input );
-                        }
-                    }
-            }
-        } );
     }
 
-    public void clear(){
-        input = new ItemStack( Material.AIR, 0,(short) 0, (byte) 0);
-        draw();
+    public void clear() {
+        ((GUIContainer) getParent()).getInventory().setItem(getPosition().toInventoryPosition(), null);
+        ((GUIContainer) getParent()).getInventory().setItem(getPosition().toInventoryPosition(), new ItemStack(Material.AIR));
     }
 
     @Override
@@ -100,7 +75,7 @@ public class GUInput implements GUIElement {
     }
 
     @Override
-    public void setParent( GUIComponent parent ) {
+    public void setParent(GUIComponent parent) {
         this.parent = (GUIContainer) parent;
         setup();
     }
@@ -111,7 +86,7 @@ public class GUInput implements GUIElement {
     }
 
     @Override
-    public void setSize( Vector2i dimension ) {
+    public void setSize(Vector2i dimension) {
         this.size = dimension;
     }
 
@@ -121,43 +96,44 @@ public class GUInput implements GUIElement {
     }
 
     @Override
-    public void setPosition( Vector2i dimension ) {
+    public void setPosition(Vector2i dimension) {
         this.position = dimension;
     }
 
     @Override
     public void draw() {
-        parent.getInventory().setItem( position.getX() + position.getY() * 9, input );
+//        parent.getInventory().setItem(position.getX() + position.getY() * 9, input);
     }
 
     @Override
     public void dispose() {
-        if ( parent.getInventory().getItem( position.toInventoryPosition() ).equals( input ) )
-            parent.getInventory().setItem( position.toInventoryPosition(),  new ItemStack( Material.AIR ) );    }
+        clear();
+    }
 
     @Override
     public ItemStack getNative() {
-        return input;
+        return parent.getInventory().getItem(getPosition().toInventoryPosition());
+//        return input;
     }
 
     @Override
-    public void addEvent( GUIEvent event ) {
-        events.add( event );
+    public void addEvent(GUIEvent event) {
+        events.add(event);
     }
 
     @Override
-    public void removeEvent( GUIEvent event ) {
-        events.remove( event );
+    public void removeEvent(GUIEvent event) {
+        events.remove(event);
     }
 
     @Override
-    public void addGlobalEvent( GUIEvent event ) {
-        parent.addGlobalEvent( event );
+    public void addGlobalEvent(GUIEvent event) {
+        parent.addGlobalEvent(event);
     }
 
     @Override
-    public void removeGlobalEvent( GUIEvent event ) {
-        parent.removeGlobalEvent( event );
+    public void removeGlobalEvent(GUIEvent event) {
+        parent.removeGlobalEvent(event);
     }
 
     @Override
@@ -168,6 +144,16 @@ public class GUInput implements GUIElement {
     @Override
     public List<GUIEvent> getEvents() {
         return events;
+    }
+
+    @Override
+    public void setEvents(List<GUIEvent> events) {
+        this.events = events;
+    }
+
+    @Override
+    public void setGlobalEvents(List<GUIEvent> events) {
+        parent.setGlobalEvents(events);
     }
 
     @Override
@@ -190,10 +176,17 @@ public class GUInput implements GUIElement {
     public Object clone() {
         try {
             return super.clone();
-        }
-        catch ( CloneNotSupportedException e ) {
+        } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public ItemStack getItemOnSlot() {
+        return parent.getInventory().getItem(getPosition().getX() + getPosition().getY() * 9);
+    }
+
+    public ItemStack getInput() {
+        return getItemOnSlot();
     }
 }

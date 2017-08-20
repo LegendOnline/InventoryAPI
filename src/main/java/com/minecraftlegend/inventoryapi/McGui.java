@@ -3,21 +3,15 @@ package com.minecraftlegend.inventoryapi;
 import com.minecraftlegend.inventoryapi.EventListeners.McGuiListener;
 import com.minecraftlegend.inventoryapi.utils.Vector2i;
 import org.apache.commons.lang3.Validate;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.InventoryView;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * @Author Sauerbier | Jan
@@ -31,9 +25,10 @@ public class McGui implements GUIContainer {
     private GUILayout layout;
     private List<GUIEvent> events = new ArrayList<>();
     private List<GUIComponent> components = new ArrayList<>();
-    private boolean lock;
+    private boolean lock, registered = true;
     private McGuiListener listener;
     private JavaPlugin plugin;
+    private Player player;
 
     /**
      * Creates a basic inventory view, which is basically the entry point to this api
@@ -101,6 +96,11 @@ public class McGui implements GUIContainer {
     }
 
     public void draw( Player player ) {
+        this.player = player;
+
+        if(!registered){
+            plugin.getServer().getPluginManager().registerEvents( listener, plugin);
+        }
         if ( inventory.getType() == InventoryType.CHEST || inventory.getType() == InventoryType.ENDER_CHEST ) {
             player.openInventory( inventory );
         }
@@ -118,6 +118,7 @@ public class McGui implements GUIContainer {
     public void dispose( Player player ) {
         player.closeInventory();
         HandlerList.unregisterAll( listener );
+        registered = false;
     }
 
     @Override
@@ -147,6 +148,10 @@ public class McGui implements GUIContainer {
             }
         }
         return null;
+    }
+
+    public GUIElement getElement(int x, int y){
+        return getElement( new Vector2i( x,y ) );
     }
 
     @Override
@@ -256,6 +261,16 @@ public class McGui implements GUIContainer {
         return events;
     }
 
+    @Override
+    public void setEvents( List<GUIEvent> events ) {
+        this.events = events;
+    }
+
+    @Override
+    public void setGlobalEvents( List<GUIEvent> events ) {
+        listener.setGlobalHooks( (ArrayList<GUIEvent>) events );
+    }
+
     public String getTitle() {
         return title;
     }
@@ -268,10 +283,23 @@ public class McGui implements GUIContainer {
         return components;
     }
 
-
     @Override
-    public JavaPlugin getPlugin() {
-        return plugin;
+    public Player getPlayer(){
+        return player;
     }
 
+    @Override
+    public boolean isNativeListenerRegistered(){
+        return registered;
+    }
+
+    @Override
+    public void setNativeListenerRegistered(boolean registered){
+        this.registered = registered;
+    }
+
+    @Override
+    public JavaPlugin getPlugin(){
+        return plugin;
+    }
 }

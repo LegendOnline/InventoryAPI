@@ -38,10 +38,11 @@ public class GUIAnvil implements GUIContainer {
     private GUILayout layout;
     private List<GUIEvent> events = new ArrayList<>();
     private List<GUIComponent> components = new ArrayList<>();
-    private boolean lock;
+    private boolean lock, registered;
     private GuiAnvilListener listener;
     private HashMap<AnvilSlot, GUIElement> items = new HashMap<AnvilSlot, GUIElement>();
     private JavaPlugin plugin;
+    private Player player;
 
     public GUIAnvil(JavaPlugin plugin) {
         this.plugin = plugin;
@@ -195,6 +196,10 @@ public class GUIAnvil implements GUIContainer {
     @Override
     public void draw( Player player ) {
         try {
+            this.player = player;
+            if(!registered){
+               plugin.getServer().getPluginManager().registerEvents( listener, plugin );
+            }
             reflectOpen(player);
         }
         catch ( Exception e ) {
@@ -206,10 +211,26 @@ public class GUIAnvil implements GUIContainer {
     public void dispose( Player player ) {
         player.closeInventory();
         HandlerList.unregisterAll( listener );
+        registered = false;
     }
 
     @Override
-    public JavaPlugin getPlugin() {
+    public Player getPlayer(){
+        return player;
+    }
+
+    @Override
+    public boolean isNativeListenerRegistered(){
+        return registered;
+    }
+
+    @Override
+    public void setNativeListenerRegistered(boolean registered){
+        this.registered = registered;
+    }
+
+    @Override
+    public JavaPlugin getPlugin(){
         return plugin;
     }
 
@@ -240,6 +261,15 @@ public class GUIAnvil implements GUIContainer {
     @Override
     public List<GUIEvent> getEvents() {
         return events;
+    }
+
+    @Override
+    public void setEvents( List<GUIEvent> events ) {
+        this.events = events;
+    }
+
+    @Override
+    public void setGlobalEvents( List<GUIEvent> events ) {
     }
 
     @Override

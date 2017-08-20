@@ -45,14 +45,14 @@ public interface GUIContainer extends GUIComponent {
      * @return GUIElement if there is at least one at the given position
      * Note: there can be multiple Elements / Components applied to one position!
      */
-    GUIElement getElement( Vector2i position );
+    GUIElement getElement(Vector2i position);
 
     /**
      * This can be used to separate gui and logic
      * @param name displayname of the wanted {@link GUIElement}
      * @return GUIElement if found, else null
      */
-    GUIElement getElementByName( String name );
+    GUIElement getElementByName(String name);
 
     /**
      *
@@ -105,5 +105,8 @@ public interface GUIContainer extends GUIComponent {
      */
     void dispose( Player player );
 
+    Player getPlayer();
+    boolean isNativeListenerRegistered();
+    void setNativeListenerRegistered(boolean registered);
     JavaPlugin getPlugin();
 }

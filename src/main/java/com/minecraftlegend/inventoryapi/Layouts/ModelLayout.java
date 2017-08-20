@@ -8,6 +8,8 @@ import org.apache.commons.lang3.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 
+import java.util.ArrayList;
+
 /**
  * @Author Sauerbier | Jan
  * @Copyright 2016 by Jan Hof
@@ -49,8 +51,8 @@ public class ModelLayout extends ExactLayout {
      */
     public ModelLayout( String layout ) {
         this.layout = layout;
+        totalSize = getMaxY() * 9;
         dim = new Vector2i( 9, getMaxY() );
-        totalSize = dim.getY() * 9;
     }
 
     @Override
@@ -66,10 +68,9 @@ public class ModelLayout extends ExactLayout {
                 //original element has already be assigned | there should be some bulk change element in the future
                 //to receive all affected slots / items
                 if(orig.getParent() != null && orig.getPosition() != null){
-                    GUIElement clone = (GUIElement) orig.clone();
+                    GUIElement clone = copy( orig );
                     clone.setPosition( coords );
                     container.add( clone );
-                   // clone.draw();
                 }else{
                     orig.setPosition( coords );
                     container.add( orig );
@@ -90,7 +91,7 @@ public class ModelLayout extends ExactLayout {
                     //original element has already be assigned | there should be some bulk change element in the future
                     //to receive all affected slots / items
                     if(element.getParent() != null && element.getPosition() != null){
-                        GUIElement clone = (GUIElement) element.clone();
+                        GUIElement clone = copy( element );
                         clone.setPosition( pos );
                         container.add( clone );
                         // clone.draw();
@@ -115,7 +116,7 @@ public class ModelLayout extends ExactLayout {
                     //original element has already be assigned | there should be some bulk change element in the future
                     //to receive all affected slots / items
                     if(element.getParent() != null && element.getPosition() != null){
-                        GUIElement clone = (GUIElement) element.clone();
+                        GUIElement clone = copy( element );
                         clone.setPosition( pos );
                         container.add( clone );
                         // clone.draw();
@@ -140,7 +141,7 @@ public class ModelLayout extends ExactLayout {
                         //original element has already be assigned | there should be some bulk change element in the future
                         //to receive all affected slots / items
                         if(element.getParent() != null && element.getPosition() != null){
-                            GUIElement clone = (GUIElement) element.clone();
+                            GUIElement clone = copy( element );
                             clone.setPosition( pos );
                             container.add( clone );
                             // clone.draw();
@@ -168,7 +169,7 @@ public class ModelLayout extends ExactLayout {
                                 //original element has already be assigned | there should be some bulk change element in the future
                                 //to receive all affected slots / items
                                 if(element.getParent() != null && element.getPosition() != null){
-                                    GUIElement clone = (GUIElement) element.clone();
+                                    GUIElement clone = copy( element );
                                     clone.setPosition( new Vector2i( x, y ) );
                                     container.add( clone );
                                     // clone.draw();
@@ -183,8 +184,7 @@ public class ModelLayout extends ExactLayout {
                 }
 
 
-            }
-            else throw new IllegalArgumentException( "Layout operation '" + op + "' is not defined!" );
+            }else throw new IllegalArgumentException( "Layout operation '" + op + "' is not defined!" );
         }
     }
 
@@ -229,4 +229,12 @@ public class ModelLayout extends ExactLayout {
         return max;
     }
 
+    //Java has a really weird behavior that cloned objects are not completely deep-copied... this fucks up events
+    private GUIElement copy(GUIElement object) {
+        GUIElement clone = (GUIElement) object.clone();
+        ArrayList events = new ArrayList(  );
+        events.addAll( object.getEvents() );
+        clone.setEvents( events );
+        return clone;
+    }
 }

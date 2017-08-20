@@ -4,6 +4,7 @@ package com.minecraftlegend.inventoryapi;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ import java.util.List;
  * @Copyright 2016 by Jan Hof
  * All rights reserved.
  **/
-public interface GUIComponent extends Listener, Cloneable {
+public interface GUIComponent extends Listener, Cloneable, Serializable{
 
 
     default void registerNativeListeners( JavaPlugin plugin) {
@@ -62,6 +63,8 @@ public interface GUIComponent extends Listener, Cloneable {
      */
     List<GUIEvent> getEvents();
 
+    void setEvents(List<GUIEvent> events);
+    void setGlobalEvents(List<GUIEvent> events);
 
     /**
      * Locks this component

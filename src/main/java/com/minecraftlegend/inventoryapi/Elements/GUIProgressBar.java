@@ -38,7 +38,7 @@ public class GUIProgressBar implements GUIElement {
         int y = 0;
         int x = 0;
         for ( int i = 0; i < size.getX(); i++ ) {
-            GUILabel label = new GUILabel( " ", Material.WOOL, (byte) 8 );
+            GUILabel label = new GUILabel( " ", Material.STAINED_CLAY, (byte) 9 );
             label.setPosition( new Vector2i( ( position.getX() + x ), position.getY() + y ) );
             parent.add( label );
             barElements.add( label );
@@ -129,6 +129,16 @@ public class GUIProgressBar implements GUIElement {
     }
 
     @Override
+    public void setEvents( List<GUIEvent> events ) {
+        this.events = events;
+    }
+
+    @Override
+    public void setGlobalEvents( List<GUIEvent> events ) {
+        parent.setGlobalEvents( events );
+    }
+
+    @Override
     public void lock() {
 
     }
@@ -166,21 +176,30 @@ public class GUIProgressBar implements GUIElement {
         if ( progress >= FULL ) {
 
             progress = FULL;
-            for ( int i = 0; i < 9; i++ ) {
-                barElements.get( i ).setIcon( new ItemStack( Material.WOOL, 1, (byte) 5 ) );
-                barElements.get( i ).setTitle( " " );
+            for ( int i = 0; i < getSize().getX(); i++ ) {
+                barElements.get( i ).setIcon( new ItemStack( Material.STAINED_CLAY, 1, (byte) 13 ) );
+                barElements.get( i ).setTitle( "§a»" );
             }
-            barElements.get( 8 ).setTitle( "§a100%" );
+            barElements.get( getSize().getX() -1 ).setTitle( "§a100%" );
             draw();
             return;
         }
         this.progress = progress;
-        int filled = (int) ( (double) barElements.size() / 100D * progress );
-        for ( int i = 0; i < filled; i++ ) {
-            barElements.get( i ).setIcon( new ItemStack( Material.WOOL, 1, (byte) 5 ) );
-            barElements.get( i ).setTitle( " " );
+        int filled = (int) Math.floor( (double) barElements.size() / 100D * progress );
+        int next = (int) Math.ceil( (double) barElements.size() / 100D * progress );
+
+        if(filled == 0 && next > 0){
+            barElements.get( 0 ).setIcon( new ItemStack( Material.STAINED_CLAY, 1, (byte) 5 ) );
         }
-        barElements.get( ( filled == 0 ? 0 : filled - 1 ) ).setTitle( "§a" + Math.round( progress * 100.0 ) / 100.0 + "%" );
+
+        for ( int i = 0; i < filled; i++ ) {
+            barElements.get( i ).setIcon( new ItemStack( Material.STAINED_CLAY, 1, (byte) 13 ) );
+            barElements.get( i ).setTitle( "§a»" );
+            if(filled < next && next <= getSize().getX()){
+                barElements.get( next -1 ).setIcon( new ItemStack( Material.STAINED_CLAY, 1, (byte) 5 ) );
+            }
+        }
+        barElements.get( ( next == 0 ? 0 : next - 1 ) ).setTitle( "§a" + (Math.round(  progress * 100.0D ) / 100.0D) + "%" );
         draw();
     }
 }

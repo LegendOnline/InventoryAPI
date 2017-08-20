@@ -188,6 +188,25 @@ public class GUISubContainer extends McGui {
         }
     }
 
+    public void moveExitButton(Vector2i position){
+        if(exitButton != null){
+            exitButton.dispose();
+            exitButton.setPosition(position);
+            exitButton.setIcon(Material.REDSTONE_BLOCK);
+            exitButton.draw();
+        }
+    }
+
+    public void moveNextButton(Vector2i position){
+        if(nextButton != null){
+            nextButton.dispose();
+            nextButton.setPosition(position);
+            nextButton.setIcon(new ItemStack(Material.WOOL, (byte) 5));
+            nextButton.draw();
+        }
+    }
+
+
     public void setExitIcon( Material m ) {
         exitButton.setIcon( m );
         exitButton.draw();
