@@ -70,15 +70,8 @@ public class Router {
             throw new InvalidGUIException();
         ini.draw( player );
 
-        if ( !queryMap.isEmpty() ) {
-            try {
-                Method queryMethod = getQueryMethod( clazz, queryMap.keySet() );
-                if ( queryMap != null )
-                    callQueryMethod( queryMethod, ini, queryMap );
-            } catch ( Exception e ) {
-                throw new InvalidRouteException( INVALID, "Can't resolve query" );
-            }
-        }
+        if ( !queryMap.isEmpty() )
+            query( ini,queryMap );
 
     }
 
@@ -101,7 +94,6 @@ public class Router {
         }
 
         method.invoke( guiInstance, parameters );
-
     }
 
     private Method getQueryMethod( Class< ? extends McGui > clazz, Set< String > keys ) {
