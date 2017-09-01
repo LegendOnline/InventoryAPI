@@ -1,13 +1,11 @@
 package com.minecraftlegend.inventoryapi.Router;
 
-import com.minecraftlegend.inventoryapi.GUILayout;
 import com.minecraftlegend.inventoryapi.McGui;
 import com.minecraftlegend.inventoryapi.Router.annotation.Query;
 import com.minecraftlegend.inventoryapi.Router.annotation.Route;
 import com.minecraftlegend.inventoryapi.Router.exception.InvalidGUIException;
 import com.minecraftlegend.inventoryapi.Router.exception.InvalidRouteException;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -37,6 +35,11 @@ public class Router {
 
     private final static Router instance = new Router();
 
+    /**
+     * Gets the singleton instance.
+     *
+     * @return the instance
+     */
     public static Router getInstance() {
         return instance;
     }
@@ -47,34 +50,106 @@ public class Router {
     private HashMap< URI, Class< ? extends McGui > > pages;
 
 
+    /**
+     * Registers gui class.
+     * Requirements:
+     * <ul>
+     *     <li>The class needs a @Route(value="/path") Annotation</li>
+     *     <li>The class needs a default constructor</li>
+     * </ul>
+     *
+     * @param guiClass the gui class
+     */
     public void registerGUI( Class< ? extends McGui > guiClass ) {
         //Check for Annotation
         if ( !guiClass.isAnnotationPresent( Route.class ) )
             throw new InvalidRouteException( MISSING, "Missing path for " + guiClass.getName() + "! Use the @Route annotation." );
 
+        try {
+            guiClass.getDeclaredConstructor();
+        } catch ( NoSuchMethodException e ) {
+            throw new InvalidGUIException( guiClass );
+        }
+
         //force every URL to lower case letters
         String urlPath = guiClass.getDeclaredAnnotation( Route.class ).value().toLowerCase();
+
         if ( pages.containsKey( urlPath ) )
             throw new InvalidRouteException( INVALID, "Path \"" + urlPath + "\" already exists!" );
-        URI uri = URI.create( urlPath );
-        pages.put( uri, guiClass );
+
+        try {
+            URI uri = URI.create( urlPath );
+            pages.put( uri, guiClass );
+        } catch ( IllegalArgumentException e ) {
+            throw new InvalidRouteException( INVALID, "Path \"" + urlPath + "\" can't be resolved into an URI!" );
+        }
+
     }
 
-    public void open( Player player, String path ) {
+    /**
+     * Opens a gui given by a gui class.
+     *
+     * @param player the player
+     * @param clazz   the gui class
+     * @return the mc gui instance or null
+     */
+    public McGui open( Player player, Class<? extends McGui> clazz)
+    {
+        for(Entry< URI, Class< ? extends McGui > > entry:pages.entrySet())
+        {
+            if(entry.getValue().equals( clazz ))
+            {
+                return open(player,entry.getKey().toString());
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Opens a gui given by a path.
+     *
+     * @param player the player
+     * @param path   the path
+     * @return the mc gui instance or null
+     */
+    public McGui open( Player player, String path ) {
+        //Save paths to lower case
         path = path.toLowerCase();
         URI uri = URI.create( path );
+        //Get query parameters
         Map< String, QueryParameter > queryMap = splitQuery( uri );
-        Class< ? extends McGui > clazz = pages.get( path );
+        //Find the gui by the path without query
+        Class< ? extends McGui > clazz = pages.get( uri.getPath() );
+        //Try to open the gui
         McGui ini = tryInitialization( clazz );
         if ( ini == null )
             throw new InvalidGUIException();
         ini.draw( player );
 
         if ( !queryMap.isEmpty() )
-            query( ini,queryMap );
+            query( ini, queryMap );
 
+        return ini;
     }
 
+    /**
+     * Calls a method of a gui instance marked with the Query annotation.
+     * Methods needs to have QueryParameter parameters with the name used
+     * in a query.
+     * <br>Example: "/some/path?val=1&2&foo=TestValue"
+     * <br>     @Query
+     * <br>     public void demo(QueryParameter val, QueryParameter foo)
+     * <br>     {
+     * <br>         // val = ["1","2"]
+     * <br>         // foo = ["TestValue"]
+     * <br>     }
+     *
+     * @see QueryParameter
+     * @see Query
+     *
+     * @param gui      the gui
+     * @param queryMap the query map
+     */
     public void query( McGui gui, Map< String, QueryParameter > queryMap ) {
         try {
             Method queryMethod = getQueryMethod( gui.getClass(), queryMap.keySet() );
@@ -85,6 +160,14 @@ public class Router {
         }
     }
 
+    /**
+     * Method for calling a method from a gui instance with given parameters.
+     *
+     * @param method        the query method
+     * @param guiInstance   the gui instance
+     * @param values        the parameter values
+     * @throws Exception    different exceptions
+     */
     private void callQueryMethod( Method method, McGui guiInstance, Map< String, QueryParameter > values ) throws Exception {
 
         QueryParameter[] parameters = new QueryParameter[ method.getParameterCount() ];
@@ -96,6 +179,14 @@ public class Router {
         method.invoke( guiInstance, parameters );
     }
 
+    /**
+     * Searches for a method marked with the Query annotation.
+     * The method needs to have parameters from type QueryParameter
+     * with the same name as the later query given by the URI!
+     * @param clazz
+     * @param keys
+     * @return a query method
+     */
     private Method getQueryMethod( Class< ? extends McGui > clazz, Set< String > keys ) {
 
         int parameters = keys.size();
@@ -117,9 +208,17 @@ public class Router {
         return null;
     }
 
+    /**
+     * Tries to initialize a gui.
+     * A default constructor is required for that.
+     *
+     * @param clazz the gui class
+     * @return a McGui instance or null
+     */
     private McGui tryInitialization( Class< ? extends McGui > clazz ) {
-        McGui ini;
+        McGui ini = null;
         Constructor< ? extends McGui > constuctor;
+        //Try default constructor
         try {
             constuctor = clazz.getDeclaredConstructor();
             ini = constuctor.newInstance();
@@ -127,21 +226,7 @@ public class Router {
         } catch ( Exception e ) {
 
         }
-        try {
-            constuctor = clazz.getDeclaredConstructor( JavaPlugin.class, GUILayout.class );
-            ini = constuctor.newInstance();
-            return ini;
-        } catch ( Exception e ) {
-
-        }
-        try {
-            constuctor = clazz.getDeclaredConstructor( JavaPlugin.class, String.class, GUILayout.class );
-            ini = constuctor.newInstance();
-            return ini;
-        } catch ( Exception e ) {
-
-        }
-        return null;
+        return ini;
     }
 
     /**
