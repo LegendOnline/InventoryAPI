@@ -3,10 +3,10 @@ package com.minecraftlegend.inventoryapi.Router.exception;
 import com.minecraftlegend.inventoryapi.McGui;
 
 /**
- * <h1>InventoryAPI</h1>
- * <h2>Class heading</h2>
+ * <h1>InvalidGUIException</h1>
  * <p>
- * Class description.
+ * A runtime exception thrown when a McGui can't
+ * be instantiated by the Router.
  * </p>
  *
  * @author Drayke

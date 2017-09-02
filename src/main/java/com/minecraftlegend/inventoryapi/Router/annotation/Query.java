@@ -6,10 +6,19 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * <h1>InventoryAPI</h1>
- * <h2>Class heading</h2>
+ * <h1>Query Annotation</h1>
  * <p>
- * Class description.
+ * This annotation marks a method to be "queryable". The method
+ * needs parameter of type QueryParameter with the same name as
+ * the query request.
+ *
+ * <br>Example: "/some/path?val=1&2&foo=TestValue"
+ * <br>     @Query
+ * <br>     public void demo(QueryParameter val, QueryParameter foo)
+ * <br>     {
+ * <br>         // val = ["1","2"]
+ * <br>         // foo = ["TestValue"]
+ * <br>     }
  * </p>
  *
  * @author Drayke

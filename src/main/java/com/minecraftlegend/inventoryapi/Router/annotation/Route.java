@@ -6,10 +6,19 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * <h1>InventoryAPI</h1>
- * <h2>Class heading</h2>
+ * <h1>Route Annoation</h1>
  * <p>
- * Class description.
+ * This Annotation sets the path for a McGui to be reachable
+ * by the Router:
+ *
+ * Example:
+ * <br>     @Route( value= "/demo" )
+ * <br>     public class DemoGui extends McGui
+ * <br>     {
+ * <br>         public DemoGui(){
+ * <br>             super(Plugin.getInstance(),"Demo GUI",someLayout);
+ * <br>             Router.registerGui(this);
+ * <br>     }
  * </p>
  *
  * @author Drayke

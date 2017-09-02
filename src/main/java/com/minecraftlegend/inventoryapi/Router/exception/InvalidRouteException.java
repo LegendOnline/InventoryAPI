@@ -1,10 +1,10 @@
 package com.minecraftlegend.inventoryapi.Router.exception;
 
 /**
- * <h1>InventoryAPI</h1>
- * <h2>Class heading</h2>
+ * <h1>InvalidRouteException</h1>
  * <p>
- * Class description.
+ * A runtime exception thrown when the Router
+ * can't get a valid URI route to a McGui.
  * </p>
  *
  * @author Drayke

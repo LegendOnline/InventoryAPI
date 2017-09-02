@@ -21,10 +21,12 @@ import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
 
 /**
- * <h1>InventoryAPI</h1>
- * <h2>Class heading</h2>
+ * <h1>Router Singleton</h1>
  * <p>
- * Class description.
+ * The Router instance contains a collection of all
+ * registered gui class with their routes. This class
+ * is responsible for instantiating guis for a given URI path.
+ * Also query parameter are possible.
  * </p>
  *
  * @author Drayke
@@ -54,52 +56,67 @@ public class Router {
      * Registers gui class.
      * Requirements:
      * <ul>
-     *     <li>The class needs a @Route(value="/path") Annotation</li>
-     *     <li>The class needs a default constructor</li>
+     * <li>The class needs a @Route(value="/path") Annotation</li>
+     * <li>The class needs a default constructor</li>
      * </ul>
      *
      * @param guiClass the gui class
      */
     public void registerGUI( Class< ? extends McGui > guiClass ) {
-        //Check for Annotation
-        if ( !guiClass.isAnnotationPresent( Route.class ) )
-            throw new InvalidRouteException( MISSING, "Missing path for " + guiClass.getName() + "! Use the @Route annotation." );
 
+        //Check for NoArgsConstructor
         try {
             guiClass.getDeclaredConstructor();
         } catch ( NoSuchMethodException e ) {
             throw new InvalidGUIException( guiClass );
         }
 
+        //Get URI path and register gui
+        URI uri = getRouterPath( guiClass );
+        if ( uri != null )
+        {
+            if ( pages.containsKey( uri ) )
+                throw new InvalidRouteException( INVALID, "Path \"" + uri.toString() + "\" already exists!" );
+
+            pages.put( uri, guiClass );
+        }
+    }
+
+    /**
+     * Gets the defined route given by the @Route Annotation
+     * from a class.
+     *
+     * @param guiClass  the McGui class with Route Annotaion
+     * @return the defined URI
+     */
+    public URI getRouterPath( Class< ? extends McGui > guiClass ) {
+        //Check for Annotation
+        if ( !guiClass.isAnnotationPresent( Route.class ) )
+            throw new InvalidRouteException( MISSING, "Missing path for " + guiClass.getName() + "! Use the @Route annotation." );
+
         //force every URL to lower case letters
         String urlPath = guiClass.getDeclaredAnnotation( Route.class ).value().toLowerCase();
 
-        if ( pages.containsKey( urlPath ) )
-            throw new InvalidRouteException( INVALID, "Path \"" + urlPath + "\" already exists!" );
-
+        URI uri = null;
         try {
-            URI uri = URI.create( urlPath );
-            pages.put( uri, guiClass );
+            uri = URI.create( urlPath );
         } catch ( IllegalArgumentException e ) {
             throw new InvalidRouteException( INVALID, "Path \"" + urlPath + "\" can't be resolved into an URI!" );
         }
-
+        return uri;
     }
 
     /**
      * Opens a gui given by a gui class.
      *
      * @param player the player
-     * @param clazz   the gui class
+     * @param clazz  the gui class
      * @return the mc gui instance or null
      */
-    public McGui open( Player player, Class<? extends McGui> clazz)
-    {
-        for(Entry< URI, Class< ? extends McGui > > entry:pages.entrySet())
-        {
-            if(entry.getValue().equals( clazz ))
-            {
-                return open(player,entry.getKey().toString());
+    public McGui open( Player player, Class< ? extends McGui > clazz ) {
+        for ( Entry< URI, Class< ? extends McGui > > entry : pages.entrySet() ) {
+            if ( entry.getValue().equals( clazz ) ) {
+                return open( player, entry.getKey().toString() );
             }
         }
         return null;
@@ -144,11 +161,10 @@ public class Router {
      * <br>         // foo = ["TestValue"]
      * <br>     }
      *
-     * @see QueryParameter
-     * @see Query
-     *
      * @param gui      the gui
      * @param queryMap the query map
+     * @see QueryParameter
+     * @see Query
      */
     public void query( McGui gui, Map< String, QueryParameter > queryMap ) {
         try {
@@ -163,10 +179,10 @@ public class Router {
     /**
      * Method for calling a method from a gui instance with given parameters.
      *
-     * @param method        the query method
-     * @param guiInstance   the gui instance
-     * @param values        the parameter values
-     * @throws Exception    different exceptions
+     * @param method      the query method
+     * @param guiInstance the gui instance
+     * @param values      the parameter values
+     * @throws Exception different exceptions
      */
     private void callQueryMethod( Method method, McGui guiInstance, Map< String, QueryParameter > values ) throws Exception {
 
@@ -183,6 +199,7 @@ public class Router {
      * Searches for a method marked with the Query annotation.
      * The method needs to have parameters from type QueryParameter
      * with the same name as the later query given by the URI!
+     *
      * @param clazz
      * @param keys
      * @return a query method
