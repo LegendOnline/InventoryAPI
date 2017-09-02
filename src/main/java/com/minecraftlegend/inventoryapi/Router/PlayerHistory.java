@@ -46,8 +46,7 @@ public class PlayerHistory {
      *
      * @return false if empty, else true
      */
-    public boolean canPop()
-    {
+    public boolean canPop() {
         return !history.empty();
     }
 
@@ -75,7 +74,7 @@ public class PlayerHistory {
      * @return the boolean
      */
     public boolean openLastAndPop() {
-        if(!history.empty()) {
+        if ( !history.empty() ) {
             Router.getInstance().open( player, pop().toString() );
             return true;
         }
@@ -87,11 +86,10 @@ public class PlayerHistory {
      *
      * @param uri the uri
      */
-    public void push(URI uri)
-    {
+    public void push( URI uri ) {
         int max = Navigation.getInstance().getHistoryLength();
 
-        if(history.size() >= max)
+        if ( history.size() >= max )
             history.remove( 0 );
 
         history.push( uri );
@@ -101,11 +99,10 @@ public class PlayerHistory {
      * Length of the history.
      * Limited by the Navigation setting.
      *
-     * @see Navigation#historyLength
      * @return the length
+     * @see Navigation#historyLength
      */
-    public int length()
-    {
+    public int length() {
         return history.size();
     }
 

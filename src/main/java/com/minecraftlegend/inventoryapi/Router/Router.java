@@ -73,8 +73,7 @@ public class Router {
 
         //Get URI path and register gui
         URI uri = getRouterPath( guiClass );
-        if ( uri != null )
-        {
+        if ( uri != null ) {
             if ( pages.containsKey( uri ) )
                 throw new InvalidRouteException( INVALID, "Path \"" + uri.toString() + "\" already exists!" );
 
@@ -86,7 +85,7 @@ public class Router {
      * Gets the defined route given by the @Route Annotation
      * from a class.
      *
-     * @param guiClass  the McGui class with Route Annotaion
+     * @param guiClass the McGui class with Route Annotaion
      * @return the defined URI
      */
     public URI getRouterPath( Class< ? extends McGui > guiClass ) {

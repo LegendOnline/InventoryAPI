@@ -33,45 +33,45 @@ public final class Navigation {
         return instance;
     }
 
-    private Navigation(){}
+    private Navigation() {
+    }
 
     private boolean enableHistory = true;
 
     private int historyLength = 3;
 
-    private HashSet<PlayerHistory> histories = new HashSet<>( );
+    private HashSet< PlayerHistory > histories = new HashSet<>();
 
 
     /**
      * Push a route to player history (if enabled) and
      * opens the corresponding gui.
      *
-     * @see Navigation#enableHistory
-     *
      * @param player   the player
      * @param guiClazz the gui clazz
      * @return the mc gui
+     * @see Navigation#enableHistory
      */
-    public McGui push( Player player, Class<? extends McGui> guiClazz ){
-        return push(player,Router.getInstance().getRouterPath( guiClazz ).toString());
+    public McGui push( Player player, Class< ? extends McGui > guiClazz ) {
+        return push( player, Router.getInstance().getRouterPath( guiClazz ).toString() );
     }
 
     /**
      * Push a route to player history (if enabled) and
      * opens the corresponding gui.
      *
-     * @see Navigation#enableHistory
      * @param player the player
      * @param route  the route
      * @return the gui instance
+     * @see Navigation#enableHistory
      */
-    public McGui push( Player player, String route ){
+    public McGui push( Player player, String route ) {
         //Open gui
-        McGui ini = Router.getInstance().open( player,route );
+        McGui ini = Router.getInstance().open( player, route );
 
         //Save URI to players history
-        if(enableHistory && ini !=null)
-            getHistory( player ).push( URI.create(route) );
+        if ( enableHistory && ini != null )
+            getHistory( player ).push( URI.create( route ) );
 
         return ini;
     }
@@ -83,16 +83,14 @@ public final class Navigation {
      *
      * @param player the player
      */
-    public void pop( Player player ){
+    public void pop( Player player ) {
 
-        if(enableHistory)
-        {
+        if ( enableHistory ) {
             PlayerHistory history = getHistory( player );
-            if(history.canPop())
-            {
+            if ( history.canPop() ) {
                 //Open last URI
                 String lastRoute = history.pop().toString();
-                Router.getInstance().open( player, lastRoute);
+                Router.getInstance().open( player, lastRoute );
                 return;
             }
         }
@@ -108,11 +106,10 @@ public final class Navigation {
      * @param player the player
      * @return the history
      */
-    public PlayerHistory getHistory( Player player )
-    {
+    public PlayerHistory getHistory( Player player ) {
         Optional< PlayerHistory > first = histories.stream().filter( playerHistory -> playerHistory.getPlayer().equals( player ) ).findFirst();
-        if(first.isPresent())
-            return  first.get();
+        if ( first.isPresent() )
+            return first.get();
 
         PlayerHistory playerHistory = new PlayerHistory( player );
         histories.add( playerHistory );
