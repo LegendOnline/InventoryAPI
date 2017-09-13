@@ -49,7 +49,7 @@ public class Router {
     private Router() {
     }
 
-    private HashMap< URI, Class< ? extends McGui > > pages;
+    private HashMap< URI, Class< ? extends McGui > > pages = new HashMap<>( );
 
 
     /**
