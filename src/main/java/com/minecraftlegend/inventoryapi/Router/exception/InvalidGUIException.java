@@ -23,9 +23,3 @@ public class InvalidGUIException extends RuntimeException
         super("Could not construct GUI ("+clazz.getName()+"). Is a default constructor present?");
     }
 }
-
-/***********************************************************************************************
- *
- *                  All rights reserved, MadDev (c) copyright 2017
- *
- ***********************************************************************************************/

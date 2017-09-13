@@ -110,9 +110,3 @@ public final class QueryParameter extends ArrayList< String > {
         return Boolean.parseBoolean( get( index ) );
     }
 }
-
-/***********************************************************************************************
- *
- *                  All rights reserved, MadDev (c) copyright 2017
- *
- ***********************************************************************************************/
