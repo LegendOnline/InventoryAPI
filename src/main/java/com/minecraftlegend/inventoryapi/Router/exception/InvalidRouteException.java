@@ -25,7 +25,8 @@ public class InvalidRouteException extends RuntimeException {
 
     public enum Cause {
         MISSING( "Route is missing!" ),
-        INVALID( "Route is invalid!" );
+        INVALID( "Route is invalid!" ),
+        NOTFOUND("Route not found or registered!");
 
         private String message;
 
