@@ -309,4 +309,20 @@ public class McGui implements GUIContainer {
     public JavaPlugin getPlugin() {
         return plugin;
     }
+
+    /**
+     * Mathematical function to determine a suited
+     * inventory size.
+     *
+     * For example 15 Items are rounded to 18 inventory slots.
+     *
+     * @param elements      the number of elements to round up
+     *
+     * @return the numbers multiple
+     */
+    protected int round( int elements )
+    {
+        final int multiple = 9;
+        return multiple * (int) Math.ceil( (float) elements / (float) multiple );
+    }
 }
