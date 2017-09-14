@@ -150,7 +150,8 @@ public class Router {
             throw new InvalidGUIException(clazz);
         ini.draw( player );
 
-        if ( !queryMap.isEmpty() ) query( ini, queryMap );
+        if ( !queryMap.isEmpty() )
+            query( ini, queryMap );
 
         return ini;
     }
@@ -160,8 +161,8 @@ public class Router {
      * Methods needs to have QueryParameter parameters with the name used
      * in a query.
      * <br>Example: "/some/path?val=1&2&foo=TestValue"
-     * <br>     @Query
-     * <br>     public void demo(QueryParameter val, QueryParameter foo)
+     * <br>     @Query( args = {"val","foo"} )
+     * <br>     private void demo(QueryParameter val, QueryParameter foo)
      * <br>     {
      * <br>         // val = ["1","2"]
      * <br>         // foo = ["TestValue"]
@@ -174,11 +175,17 @@ public class Router {
      * @see Query
      */
     public void query( McGui gui, Map<String, QueryParameter> queryMap ) {
+
+        //Find method with exact same arguments
+        Method queryMethod = getQueryMethod( gui.getClass(), queryMap.keySet() );
+
+        if(queryMethod==null)
+            throw new InvalidRouteException( QUERY,"No private method found for query: "+queryMap.keySet().toString() );
+
         try {
-            Method queryMethod = getQueryMethod( gui.getClass(), queryMap.keySet() );
-            if ( queryMap != null ) callQueryMethod( queryMethod, gui, queryMap );
+            callQueryMethod( queryMethod, gui, queryMap );
         } catch ( Exception e ) {
-            throw new InvalidRouteException( INVALID, "Can't resolve query" );
+            throw new InvalidRouteException( e,QUERY, "Can not call query method: " + queryMethod.getName() );
         }
     }
 
@@ -194,12 +201,17 @@ public class Router {
     private void callQueryMethod( Method method, McGui guiInstance, Map<String, QueryParameter> values ) throws Exception {
 
         QueryParameter[] parameters = new QueryParameter[method.getParameterCount()];
+        values.values().toArray( parameters );
 
-        for ( int i = 0; i < parameters.length; i++ ) {
-            parameters[i] = values.get( method.getParameters()[i].getName() );
-        }
+        //Make method accessible
+        boolean accessible = method.isAccessible();
+        if(!accessible) method.setAccessible( true );
 
+        //Invoke
         method.invoke( guiInstance, parameters );
+
+        //Reset methods accessibility
+        method.setAccessible( accessible );
     }
 
     /**
@@ -216,17 +228,30 @@ public class Router {
 
         int parameters = keys.size();
         List<Method> methods = Arrays.asList( clazz.getDeclaredMethods() );
-        List<Method> queryMethods = methods.stream().filter( method -> method.isAnnotationPresent( Query.class ) ).filter( method -> method.getParameterCount() == parameters ).collect( toList() );
+        List<Method> queryMethods = methods.stream()
+                .filter( method -> method.isAnnotationPresent( Query.class ) )
+                .filter( method -> method.getParameterCount() == parameters ).collect( toList() );
+
 
         for ( Method method : queryMethods ) {
-            boolean valid = true;
-            for ( int i = 0; i < parameters; i++ ) {
-                String tempName = method.getParameters()[i].getName().toLowerCase();
-                if ( !keys.contains( tempName ) ) valid = false;
-            }
-            if ( valid ) return method;
+            Query query = method.getDeclaredAnnotation( Query.class );
+            if(matchArguments( keys, query.args() )) return method;
         }
         return null;
+    }
+
+    private boolean matchArguments(Set<String> keys, String[] args)
+    {
+        List<String> keyList = new ArrayList<>( keys );
+        if(keys.size() == args.length)
+        {
+            for(int i=0;i<args.length;i++)
+            {
+                if(!keyList.get( i ).equalsIgnoreCase( args[i] ))
+                    return false;
+            }
+        }
+        return true;
     }
 
     /**

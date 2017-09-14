@@ -10,11 +10,11 @@ import java.lang.annotation.Target;
  * <p>
  * This annotation marks a method to be "queryable". The method
  * needs parameter of type QueryParameter with the same name as
- * the query request.
+ * the query request. Also the order of the parameters is important!
  *
  * <br>Example: "/some/path?val=1&2&foo=TestValue"
- * <br>     @Query
- * <br>     public void demo(QueryParameter val, QueryParameter foo)
+ * <br>     @Query( args = {"val","foo"} )
+ * <br>     private void demo(QueryParameter val, QueryParameter foo)
  * <br>     {
  * <br>         // val = ["1","2"]
  * <br>         // foo = ["TestValue"]
@@ -28,5 +28,7 @@ import java.lang.annotation.Target;
 @Target( value = ElementType.METHOD )
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface Query {
+
+    String[] args();
 
 }

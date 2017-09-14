@@ -313,14 +313,16 @@ public class McGui implements GUIContainer {
     /**
      * Mathematical function to determine a suited
      * inventory size.
-     *
      * For example 15 Items are rounded to 18 inventory slots.
+     *
+     * This method is static to enable a call within super constructor
+     * for the Layouts.
      *
      * @param elements      the number of elements to round up
      *
      * @return the numbers multiple
      */
-    protected int round( int elements )
+    protected final static int round( int elements )
     {
         final int multiple = 9;
         return multiple * (int) Math.ceil( (float) elements / (float) multiple );
