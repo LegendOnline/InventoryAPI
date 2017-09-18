@@ -18,14 +18,21 @@ public class InvalidRouteException extends RuntimeException {
         super( cause.getMessage() );
     }
 
-    public InvalidRouteException( Cause cause, String route ) {
-        super( cause.getMessage() + " (" + route + ")" );
+    public InvalidRouteException( Cause cause, String message ) {
+        super( cause.getMessage() + message );
+    }
+
+    public InvalidRouteException( Exception e, Cause cause, String message)
+    {
+        super(cause.getMessage()+" "+message,e.getCause());
     }
 
 
     public enum Cause {
         MISSING( "Route is missing!" ),
-        INVALID( "Route is invalid!" );
+        INVALID( "Route is invalid!" ),
+        NOTFOUND("Route not found or registered!"),
+        QUERY("No suitable query found!");
 
         private String message;
 

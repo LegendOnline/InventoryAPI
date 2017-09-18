@@ -8,6 +8,7 @@ import com.minecraftlegend.inventoryapi.Router.exception.InvalidRouteException;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.AbstractMap.SimpleImmutableEntry;
@@ -15,8 +16,7 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import static com.minecraftlegend.inventoryapi.Router.exception.InvalidRouteException.Cause.INVALID;
-import static com.minecraftlegend.inventoryapi.Router.exception.InvalidRouteException.Cause.MISSING;
+import static com.minecraftlegend.inventoryapi.Router.exception.InvalidRouteException.Cause.*;
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
 
@@ -49,7 +49,7 @@ public class Router {
     private Router() {
     }
 
-    private HashMap< URI, Class< ? extends McGui > > pages;
+    private HashMap<URI, Class<? extends McGui>> pages = new HashMap<>();
 
 
     /**
@@ -62,7 +62,7 @@ public class Router {
      *
      * @param guiClass the gui class
      */
-    public void registerGUI( Class< ? extends McGui > guiClass ) {
+    public void registerGUI( Class<? extends McGui> guiClass ) {
 
         //Check for NoArgsConstructor
         try {
@@ -86,9 +86,10 @@ public class Router {
      * from a class.
      *
      * @param guiClass the McGui class with Route Annotaion
+     *
      * @return the defined URI
      */
-    public URI getRouterPath( Class< ? extends McGui > guiClass ) {
+    public URI getRouterPath( Class<? extends McGui> guiClass ) {
         //Check for Annotation
         if ( !guiClass.isAnnotationPresent( Route.class ) )
             throw new InvalidRouteException( MISSING, "Missing path for " + guiClass.getName() + "! Use the @Route annotation." );
@@ -110,10 +111,11 @@ public class Router {
      *
      * @param player the player
      * @param clazz  the gui class
+     *
      * @return the mc gui instance or null
      */
-    public McGui open( Player player, Class< ? extends McGui > clazz ) {
-        for ( Entry< URI, Class< ? extends McGui > > entry : pages.entrySet() ) {
+    public McGui open( Player player, Class<? extends McGui> clazz ) {
+        for ( Entry<URI, Class<? extends McGui>> entry : pages.entrySet() ) {
             if ( entry.getValue().equals( clazz ) ) {
                 return open( player, entry.getKey().toString() );
             }
@@ -126,6 +128,7 @@ public class Router {
      *
      * @param player the player
      * @param path   the path
+     *
      * @return the mc gui instance or null
      */
     public McGui open( Player player, String path ) {
@@ -133,13 +136,18 @@ public class Router {
         path = path.toLowerCase();
         URI uri = URI.create( path );
         //Get query parameters
-        Map< String, QueryParameter > queryMap = splitQuery( uri );
+        Map<String, QueryParameter> queryMap = splitQuery( uri );
+
         //Find the gui by the path without query
-        Class< ? extends McGui > clazz = pages.get( uri.getPath() );
+        Class<? extends McGui> clazz = pages.get( URI.create(uri.getPath()) );
+
+        if ( clazz == null )
+            throw new InvalidRouteException( NOTFOUND, "Path \"" + uri.getPath() + "\" not found!" );
+
         //Try to open the gui
         McGui ini = tryInitialization( clazz );
         if ( ini == null )
-            throw new InvalidGUIException();
+            throw new InvalidGUIException(clazz);
         ini.draw( player );
 
         if ( !queryMap.isEmpty() )
@@ -153,8 +161,8 @@ public class Router {
      * Methods needs to have QueryParameter parameters with the name used
      * in a query.
      * <br>Example: "/some/path?val=1&2&foo=TestValue"
-     * <br>     @Query
-     * <br>     public void demo(QueryParameter val, QueryParameter foo)
+     * <br>     @Query( args = {"val","foo"} )
+     * <br>     private void demo(QueryParameter val, QueryParameter foo)
      * <br>     {
      * <br>         // val = ["1","2"]
      * <br>         // foo = ["TestValue"]
@@ -162,16 +170,22 @@ public class Router {
      *
      * @param gui      the gui
      * @param queryMap the query map
+     *
      * @see QueryParameter
      * @see Query
      */
-    public void query( McGui gui, Map< String, QueryParameter > queryMap ) {
+    public void query( McGui gui, Map<String, QueryParameter> queryMap ) {
+
+        //Find method with exact same arguments
+        Method queryMethod = getQueryMethod( gui.getClass(), queryMap.keySet() );
+
+        if(queryMethod==null)
+            throw new InvalidRouteException( QUERY,"No private method found for query: "+queryMap.keySet().toString() );
+
         try {
-            Method queryMethod = getQueryMethod( gui.getClass(), queryMap.keySet() );
-            if ( queryMap != null )
-                callQueryMethod( queryMethod, gui, queryMap );
+            callQueryMethod( queryMethod, gui, queryMap );
         } catch ( Exception e ) {
-            throw new InvalidRouteException( INVALID, "Can't resolve query" );
+            throw new InvalidRouteException( e,QUERY, "Can not call query method: " + queryMethod.getName() );
         }
     }
 
@@ -181,17 +195,23 @@ public class Router {
      * @param method      the query method
      * @param guiInstance the gui instance
      * @param values      the parameter values
+     *
      * @throws Exception different exceptions
      */
-    private void callQueryMethod( Method method, McGui guiInstance, Map< String, QueryParameter > values ) throws Exception {
+    private void callQueryMethod( Method method, McGui guiInstance, Map<String, QueryParameter> values ) throws Exception {
 
-        QueryParameter[] parameters = new QueryParameter[ method.getParameterCount() ];
+        QueryParameter[] parameters = new QueryParameter[method.getParameterCount()];
+        values.values().toArray( parameters );
 
-        for ( int i = 0; i < parameters.length; i++ ) {
-            parameters[ i ] = values.get( method.getParameters()[ i ].getName() );
-        }
+        //Make method accessible
+        boolean accessible = method.isAccessible();
+        if(!accessible) method.setAccessible( true );
 
+        //Invoke
         method.invoke( guiInstance, parameters );
+
+        //Reset methods accessibility
+        method.setAccessible( accessible );
     }
 
     /**
@@ -201,27 +221,37 @@ public class Router {
      *
      * @param clazz
      * @param keys
+     *
      * @return a query method
      */
-    private Method getQueryMethod( Class< ? extends McGui > clazz, Set< String > keys ) {
+    private Method getQueryMethod( Class<? extends McGui> clazz, Set<String> keys ) {
 
         int parameters = keys.size();
-        List< Method > methods = Arrays.asList( clazz.getDeclaredMethods() );
-        List< Method > queryMethods = methods.stream()
+        List<Method> methods = Arrays.asList( clazz.getDeclaredMethods() );
+        List<Method> queryMethods = methods.stream()
                 .filter( method -> method.isAnnotationPresent( Query.class ) )
-                .filter( method -> method.getParameterCount() == parameters )
-                .collect( toList() );
+                .filter( method -> method.getParameterCount() == parameters ).collect( toList() );
+
 
         for ( Method method : queryMethods ) {
-            boolean valid = true;
-            for ( int i = 0; i < parameters; i++ ) {
-                String tempName = method.getParameters()[ i ].getName().toLowerCase();
-                if ( !keys.contains( tempName ) )
-                    valid = false;
-            }
-            if ( valid ) return method;
+            Query query = method.getDeclaredAnnotation( Query.class );
+            if(matchArguments( keys, query.args() )) return method;
         }
         return null;
+    }
+
+    private boolean matchArguments(Set<String> keys, String[] args)
+    {
+        List<String> keyList = new ArrayList<>( keys );
+        if(keys.size() == args.length)
+        {
+            for(int i=0;i<args.length;i++)
+            {
+                if(!keyList.get( i ).equalsIgnoreCase( args[i] ))
+                    return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -229,20 +259,26 @@ public class Router {
      * A default constructor is required for that.
      *
      * @param clazz the gui class
+     *
      * @return a McGui instance or null
      */
-    private McGui tryInitialization( Class< ? extends McGui > clazz ) {
+    private McGui tryInitialization( Class<? extends McGui> clazz ) {
         McGui ini = null;
-        Constructor< ? extends McGui > constuctor;
+        Constructor<? extends McGui> constructor;
         //Try default constructor
         try {
-            constuctor = clazz.getDeclaredConstructor();
-            ini = constuctor.newInstance();
+            constructor = clazz.getDeclaredConstructor();
+            ini = constructor.newInstance();
             return ini;
-        } catch ( Exception e ) {
-
-        }
-        return ini;
+        } catch ( NoSuchMethodException e ) {
+            e.printStackTrace();
+        } catch ( InstantiationException e ) {
+            e.printStackTrace();
+        } catch ( IllegalAccessException e ) {
+            e.printStackTrace();
+        } catch ( InvocationTargetException e ) {
+            e.getCause().printStackTrace();
+        } return ini;
     }
 
     /**
@@ -254,20 +290,17 @@ public class Router {
      * </ul>
      *
      * @param uri the uri
+     *
      * @return the map
      */
-    public Map< String, QueryParameter > splitQuery( URI uri ) {
-        if ( uri.getQuery() == null || uri.getQuery().isEmpty() )
-            return Collections.emptyMap();
+    public Map<String, QueryParameter> splitQuery( URI uri ) {
+        if ( uri.getQuery() == null || uri.getQuery().isEmpty() ) return Collections.emptyMap();
 
-        return Arrays.stream( uri.getQuery().split( "&" ) )
-                .map( this::splitQueryParameter )
-                .collect( Collectors.groupingBy( SimpleImmutableEntry::getKey, LinkedHashMap::new,
-                        Collectors.mapping( Entry::getValue, toCollection( QueryParameter::new ) ) ) );
+        return Arrays.stream( uri.getQuery().split( "&" ) ).map( this::splitQueryParameter ).collect( Collectors.groupingBy( SimpleImmutableEntry::getKey, LinkedHashMap::new, Collectors.mapping( Entry::getValue, toCollection( QueryParameter::new ) ) ) );
     }
 
 
-    private SimpleImmutableEntry< String, String > splitQueryParameter( String it ) {
+    private SimpleImmutableEntry<String, String> splitQueryParameter( String it ) {
         final int idx = it.indexOf( "=" );
         final String key = idx > 0 ? it.substring( 0, idx ) : it;
         final String value = idx > 0 && it.length() > idx + 1 ? it.substring( idx + 1 ) : null;
