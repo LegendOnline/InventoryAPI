@@ -295,6 +295,18 @@ public class McGui implements GUIContainer {
         return player;
     }
 
+    /**
+     * Sets the player receiving the GUI. This method is
+     * important for query methods which are executed before
+     * the actual draw call. During the draw call, the player
+     * will be overwritten again.
+     *
+     * @param player the player
+     */
+    public void setPlayer( Player player ) {
+        this.player = player;
+    }
+
     @Override
     public boolean isNativeListenerRegistered() {
         return registered;

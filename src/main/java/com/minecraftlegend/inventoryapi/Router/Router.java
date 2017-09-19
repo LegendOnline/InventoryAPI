@@ -149,6 +149,9 @@ public class Router {
         if ( ini == null )
             throw new InvalidGUIException(clazz);
 
+        //This call is important, so that the player can be accessed during query call
+        ini.setPlayer( player );
+
         if ( !queryMap.isEmpty() )
             query( ini, queryMap );
 
