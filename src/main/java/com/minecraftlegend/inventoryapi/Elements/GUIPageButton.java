@@ -1,21 +1,19 @@
 package com.minecraftlegend.inventoryapi.Elements;
 
 import com.minecraftlegend.inventoryapi.Events.ComponentClickEvent;
-import com.minecraftlegend.inventoryapi.Events.ContainerCloseEvent;
-import com.minecraftlegend.inventoryapi.Events.ContainerOpenEvent;
 import com.minecraftlegend.inventoryapi.GUIEvent;
 import com.minecraftlegend.inventoryapi.Router.Navigation;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
-
 /**
  * <h1>InventoryAPI</h1>
- * The Message enum for translation.
+ * A GUIPageButton for navigation between different pages
+ * with the help of URLs. Pages needs to be registered within
+ * the Router instance.
  *
- * @author Juyas, Drayke
+ * @author Drayke
  * @version 1.0
  * @since 13.09.2017
  */
