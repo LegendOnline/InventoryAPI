@@ -49,8 +49,10 @@ public final class Navigation {
      *
      * @param player   the player
      * @param guiClazz the gui clazz
+     *
      * @return the mc gui
-     * @see Navigation#enableHistory
+     *
+     * @see Navigation#enableHistory Navigation#enableHistory
      */
     public McGui push( Player player, Class< ? extends McGui > guiClazz ) {
         return push( player, Router.getInstance().getRouterPath( guiClazz ).toString() );
@@ -62,8 +64,10 @@ public final class Navigation {
      *
      * @param player the player
      * @param route  the route
+     *
      * @return the gui instance
-     * @see Navigation#enableHistory
+     *
+     * @see Navigation#enableHistory Navigation#enableHistory
      */
     public McGui push( Player player, String route ) {
         //Open gui
@@ -101,9 +105,23 @@ public final class Navigation {
     }
 
     /**
+     * Checks if the player can pop. If there is no page
+     * to go back, false will be returned.
+     *
+     * @param player the player
+     *
+     * @return true if player can go back in history, else false
+     */
+    public boolean canPop( Player player ) {
+        if(!enableHistory) return false;
+        return getHistory( player ).canPop();
+    }
+
+    /**
      * Gets the history of a player.
      *
      * @param player the player
+     *
      * @return the history
      */
     public PlayerHistory getHistory( Player player ) {
