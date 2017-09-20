@@ -29,7 +29,7 @@ import java.util.List;
  *         method to align the menu items to the characters from the firstRow parameter.
  *     </li>
  * </ul>
- *
+ * If the back button is not needed, simply let the backBtnText empty!
  * @author Drayke
  * @version 1.0
  * @since 20.09.2017
@@ -56,9 +56,18 @@ public final class MenuRow extends ArrayList<GUIElement> {
      * @param backBtnText  the back btn text
      */
     public MenuRow( String closeBtnText, String backBtnText ) {
-        super( ROW_LENGTH );
+        this();
         this.closeBtnText = closeBtnText;
         this.backBtnText = backBtnText;
+    }
+
+    /**
+     * Instantiates a new Menu row. Without a back button.
+     *
+     * @param closeBtnText the close btn text
+     */
+    public MenuRow( String closeBtnText ) {
+        this( closeBtnText,"");
     }
 
     /**
@@ -71,7 +80,7 @@ public final class MenuRow extends ArrayList<GUIElement> {
     public void buildMenu( Player player ) {
         //Back button shall always be the first button
         //This button will be added depending on the history of the player
-        if ( Navigation.getInstance().canPop( player ) ) set( 0, getBackButton( this.backBtnText ) );
+        if ( Navigation.getInstance().canPop( player ) && !this.backBtnText.isEmpty()) set( 0, getBackButton( this.backBtnText ) );
         else set( 0, getFillerItem() );
 
         //Add filler items
