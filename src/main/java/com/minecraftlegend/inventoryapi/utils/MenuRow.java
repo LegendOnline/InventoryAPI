@@ -43,7 +43,8 @@ public final class MenuRow extends ArrayList<GUIElement> {
     private String backBtnText = "§c<---";
 
     /**
-     * Instantiates a new Menu row.
+     * Instantiates a new Menu row. Close and back
+     * button are set with default texts.
      */
     public MenuRow() {
         super( ROW_LENGTH );
