@@ -3,6 +3,7 @@ package com.minecraftlegend.inventoryapi;
 import com.minecraftlegend.inventoryapi.EventListeners.McGuiListener;
 import com.minecraftlegend.inventoryapi.Router.QueryParameter;
 import com.minecraftlegend.inventoryapi.Router.Router;
+import com.minecraftlegend.inventoryapi.Router.exception.InvalidRouteException;
 import com.minecraftlegend.inventoryapi.utils.Vector2i;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
@@ -17,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -121,6 +123,21 @@ public class McGui implements GUIContainer {
 
     public void query( Map< String, QueryParameter > parameterMap ) {
         Router.getInstance().query( this, parameterMap );
+    }
+
+    public void query( String queryString )
+    {
+        if(queryString==null || queryString.isEmpty()) return;
+
+        //Use identifier for query in URI
+        if(!queryString.startsWith( "?" ))
+            queryString = "?" + queryString;
+
+        URI uri = URI.create( queryString );
+        if(uri.getQuery()==null) throw new InvalidRouteException( InvalidRouteException.Cause.QUERY,"Query not found: "+queryString);
+
+        Map<String, QueryParameter> parameterMap = Router.getInstance().splitQuery( uri );
+        query( parameterMap );
     }
 
     public void dispose( Player player ) {
