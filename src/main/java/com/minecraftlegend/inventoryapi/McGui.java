@@ -125,8 +125,7 @@ public class McGui implements GUIContainer {
         Router.getInstance().query( this, parameterMap );
     }
 
-    public void query( String queryString )
-    {
+    public void query( String queryString ) {
         if(queryString==null || queryString.isEmpty()) return;
 
         //Use identifier for query in URI
