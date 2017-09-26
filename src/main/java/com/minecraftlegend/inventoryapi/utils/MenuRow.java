@@ -18,36 +18,43 @@ import java.util.List;
  * <h1>MenuRow</h1>
  * A row with 9 GUIElements suited for some layouts.
  * <ul>
- *     <li>
- *         ListLayout:
- *         Call the build(Player player) method and add this instance
- *         in Front of the elements used to build the ListLayout.
- *     </li>
- *     <li>
- *         ExactLayout:
- *         Call the  buildMenu( Player player, ExactLayout layout, String firstRow )
- *         method to align the menu items to the characters from the firstRow parameter.
- *     </li>
+ * <li>
+ * ListLayout:
+ * Call the prepareMenu(Player player) method and add this List
+ * in front of the elements used to build the ListLayout.
+ * list.addAll(MenuRow);
+ * </li>
+ * <li>
+ * ExactLayout:
+ * Call the  buildMenu( Player player, ExactLayout layout, String firstRow )
+ * method to align the menu items to the characters from the firstRow parameter.
+ * </li>
  * </ul>
  * If the back button is not needed, simply let the backBtnText empty!
+ *
  * @author Drayke
  * @version 1.0
  * @since 20.09.2017
  */
 public final class MenuRow extends ArrayList<GUIElement> {
 
-    private static final int ROW_LENGTH = 9;
+    private static final int ROW_LENGTH = 9;    //< The length of one minecraft inventory row
 
-    private String closeBtnText = "§cClose";
+    private static final int SLOT_BACK = 0;     //< The slot for the back button
+    private static final int SLOT_CLOSE = 8;    //< The slot for the close button
 
-    private String backBtnText = "§c<---";
+    private String closeBtnText = null;
+    private String backBtnText = null;
+
+    private boolean prepared = false;
 
     /**
      * Instantiates a new Menu row. Close and back
      * button are set with default texts.
      */
     public MenuRow() {
-        super( ROW_LENGTH );
+        super( ROW_LENGTH ); //Preload the List
+        setDefaultButtons( null );
     }
 
     /**
@@ -57,32 +64,56 @@ public final class MenuRow extends ArrayList<GUIElement> {
      * @param backBtnText  the back btn text
      */
     public MenuRow( String closeBtnText, String backBtnText ) {
-        this();
+        super(ROW_LENGTH);
         this.closeBtnText = closeBtnText;
+        this.backBtnText = backBtnText;
+        setDefaultButtons( null );
+    }
+
+    /**
+     * Sets the title for the default close button of this instance
+     * @param closeBtnText the title
+     */
+    public void setCloseBtnText( String closeBtnText ) {
+        this.closeBtnText = closeBtnText;
+    }
+
+    /**
+     * Sets the title for the default back button of this instance
+     * @param backBtnText the title
+     */
+    public void setBackBtnText( String backBtnText ) {
         this.backBtnText = backBtnText;
     }
 
     /**
-     * Instantiates a new Menu row. Without a back button.
-     *
-     * @param closeBtnText the close btn text
+     * Sets the default buttons for the GUI.
+     * Back -and CloseButton. The backbutton is just
+     * set depending on the player
+     * @param player the player
      */
-    public MenuRow( String closeBtnText ) {
-        this( closeBtnText,"");
+    public void setDefaultButtons( Player player ) {
+        //Set default items
+        if ( player != null && Navigation.getInstance().canPop( player ) )
+            set( SLOT_BACK, getBackButton( closeBtnText==null?"§c<---":closeBtnText )  );
+        else
+            set( SLOT_BACK, getFillerItem() );
+
+        set( SLOT_CLOSE, getCloseButton( backBtnText==null?"§cX":backBtnText ) );
     }
 
     /**
      * Builds the menu with the default close and back button.
      * If the menu is cleared, the other menu elements needs
      * to be set again!
+     * After this method call, all items are in place.
      *
      * @param player the player
      */
-    public void buildMenu( Player player ) {
+    public void prepareMenu( Player player ) {
         //Back button shall always be the first button
         //This button will be added depending on the history of the player
-        if ( Navigation.getInstance().canPop( player ) && !this.backBtnText.isEmpty()) set( 0, getBackButton( this.backBtnText ) );
-        else set( 0, getFillerItem() );
+        setDefaultButtons( player );
 
         //Add filler items
         int counter = 1;
@@ -91,16 +122,14 @@ public final class MenuRow extends ArrayList<GUIElement> {
             counter++;
         }
 
-        //Close button shall always be the last button
-        set( ROW_LENGTH - 1, getCloseButton( this.closeBtnText ) );
-
         //Always just 9 Items!
-        if(size()>ROW_LENGTH)
-        {
+        if ( size() > ROW_LENGTH ) {
             List<GUIElement> tmp = subList( 0, ROW_LENGTH );
             clear();
             addAll( tmp );
         }
+
+        prepared = true;
     }
 
     /**
@@ -111,20 +140,28 @@ public final class MenuRow extends ArrayList<GUIElement> {
      * That's why this string needs to have 9 different characters
      * for a working menu!
      *
-     * @param player the player
-     * @param layout the exact layout
+     * @param player   the player
+     * @param layout   the exact layout
      * @param firstRow the first row of the exact layout
      */
     public void buildMenu( Player player, ExactLayout layout, String firstRow ) {
-        buildMenu( player );
+
+        if(!prepared) prepareMenu( player );
+
         //The first row of the layout is important!
-        if(firstRow.length()!=9) return;
+        if ( firstRow.length() != 9 ) return;
         int counter = 0;
-        for(char c : firstRow.toCharArray())
-        {
+        for ( char c : firstRow.toCharArray() ) {
             layout.set( c, get( counter ) );
             counter++;
         }
+    }
+
+    @Override
+    public GUIElement remove( int index ) {
+        GUIElement element = get( index );
+        set( index,null );
+        return element;
     }
 
     @Override
@@ -133,23 +170,17 @@ public final class MenuRow extends ArrayList<GUIElement> {
         else return element;
     }
 
-    /**
-     * Sets close button text.
-     *
-     * @param closeBtnText the close btn text
-     */
-    public void setCloseBtnText( String closeBtnText ) {
-        this.closeBtnText = closeBtnText;
+    @Override
+    public void clear() {
+        super.clear();
+        this.prepared = false;
     }
 
-    /**
-     * Sets back button text.
+    /*************************************************************
      *
-     * @param backBtnText the back btn text
-     */
-    public void setBackBtnText( String backBtnText ) {
-        this.backBtnText = backBtnText;
-    }
+     *                 Helper methods for items
+     *
+     *************************************************************/
 
     private GUIElement getCloseButton( String closeText ) {
         GUIButton button = new GUIButton( new ItemBuilder().head( "NHF_X", closeText ).build() );
@@ -176,4 +207,9 @@ public final class MenuRow extends ArrayList<GUIElement> {
     private GUIElement getFillerItem() {
         return new GUILabel( " ", Material.STAINED_GLASS_PANE, (byte) 7 );
     }
+
+    public boolean isPrepared() {
+        return prepared;
+    }
+
 }
