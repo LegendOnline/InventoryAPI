@@ -52,7 +52,7 @@ public final class Navigation {
      *
      * @return the mc gui
      *
-     * @see Navigation#enableHistory Navigation#enableHistory
+     * @see Navigation#enableHistory
      */
     public McGui push( Player player, Class< ? extends McGui > guiClazz ) {
         return push( player, Router.getInstance().getRouterPath( guiClazz ).toString() );
@@ -67,7 +67,7 @@ public final class Navigation {
      *
      * @return the gui instance
      *
-     * @see Navigation#enableHistory Navigation#enableHistory
+     * @see Navigation#enableHistory
      */
     public McGui push( Player player, String route ) {
         //Open gui
@@ -98,10 +98,8 @@ public final class Navigation {
                 return;
             }
         }
-
         //Default
         player.closeInventory();
-
     }
 
     /**
