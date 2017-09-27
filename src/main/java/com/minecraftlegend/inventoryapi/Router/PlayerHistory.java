@@ -37,8 +37,17 @@ public class PlayerHistory {
      *
      * @return the player
      */
-    public Player getPlayer() {
-        return player;
+    public final Player getPlayer() {
+        return this.player;
+    }
+
+    /**
+     * Gets the current History
+     *
+     * @return the player URI history
+     */
+    public final Stack<URI> getHistory() {
+        return this.history;
     }
 
     /**

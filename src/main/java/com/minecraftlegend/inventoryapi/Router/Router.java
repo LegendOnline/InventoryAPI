@@ -148,10 +148,14 @@ public class Router {
         McGui ini = tryInitialization( clazz );
         if ( ini == null )
             throw new InvalidGUIException(clazz);
-        ini.draw( player );
+
+        //This call is important, so that the player can be accessed during query call
+        ini.setPlayer( player );
 
         if ( !queryMap.isEmpty() )
             query( ini, queryMap );
+
+        ini.draw( player );
 
         return ini;
     }

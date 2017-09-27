@@ -49,7 +49,9 @@ public final class Navigation {
      *
      * @param player   the player
      * @param guiClazz the gui clazz
+     *
      * @return the mc gui
+     *
      * @see Navigation#enableHistory
      */
     public McGui push( Player player, Class< ? extends McGui > guiClazz ) {
@@ -62,7 +64,9 @@ public final class Navigation {
      *
      * @param player the player
      * @param route  the route
+     *
      * @return the gui instance
+     *
      * @see Navigation#enableHistory
      */
     public McGui push( Player player, String route ) {
@@ -94,16 +98,28 @@ public final class Navigation {
                 return;
             }
         }
-
         //Default
         player.closeInventory();
+    }
 
+    /**
+     * Checks if the player can pop. If there is no page
+     * to go back, false will be returned.
+     *
+     * @param player the player
+     *
+     * @return true if player can go back in history, else false
+     */
+    public boolean canPop( Player player ) {
+        if(!enableHistory) return false;
+        return getHistory( player ).canPop();
     }
 
     /**
      * Gets the history of a player.
      *
      * @param player the player
+     *
      * @return the history
      */
     public PlayerHistory getHistory( Player player ) {
