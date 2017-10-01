@@ -53,6 +53,16 @@ public class Router {
 
 
     /**
+     * Gets all registered routes
+     * @return URI list of registered GUIs
+     */
+    public List<URI> getRoutes() {
+        ArrayList<URI> routes = new ArrayList<>( );
+        routes.addAll( pages.keySet() );
+        return routes;
+    }
+
+    /**
      * Registers gui class.
      * Requirements:
      * <ul>
