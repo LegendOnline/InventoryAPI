@@ -4,8 +4,8 @@
   <artifactId>inventoryapi</artifactId>
   <versioning>
     <versions>
-      <version>1.2-SNAPSHOT</version>
+      <version>1.3-SNAPSHOT</version>
     </versions>
-    <lastUpdated>20171027200840</lastUpdated>
+    <lastUpdated>20171030163836</lastUpdated>
   </versioning>
 </metadata>
