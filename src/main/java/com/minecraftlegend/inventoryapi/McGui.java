@@ -1,17 +1,28 @@
 package com.minecraftlegend.inventoryapi;
 
 import com.minecraftlegend.inventoryapi.EventListeners.McGuiListener;
+import com.minecraftlegend.inventoryapi.Router.QueryParameter;
+import com.minecraftlegend.inventoryapi.Router.Router;
+import com.minecraftlegend.inventoryapi.Router.exception.InvalidRouteException;
 import com.minecraftlegend.inventoryapi.utils.Vector2i;
 import org.apache.commons.lang3.Validate;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.InventoryView;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.*;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * @Author Sauerbier | Jan
@@ -23,8 +34,8 @@ public class McGui implements GUIContainer {
     private Inventory inventory;
     private String title = "McGUI";
     private GUILayout layout;
-    private List<GUIEvent> events = new ArrayList<>();
-    private List<GUIComponent> components = new ArrayList<>();
+    private List< GUIEvent > events = new ArrayList<>();
+    private List< GUIComponent > components = new ArrayList<>();
     private boolean lock, registered = true;
     private McGuiListener listener;
     private JavaPlugin plugin;
@@ -32,10 +43,10 @@ public class McGui implements GUIContainer {
 
     /**
      * Creates a basic inventory view, which is basically the entry point to this api
-     * @param plugin to attach events to
-     * @param title the inventory title
-     * @param layout the layout that should be applied to design this gui
      *
+     * @param plugin to attach events to
+     * @param title  the inventory title
+     * @param layout the layout that should be applied to design this gui
      */
     public McGui( JavaPlugin plugin, String title, GUILayout layout ) {
         this.title = title;
@@ -46,12 +57,11 @@ public class McGui implements GUIContainer {
         init();
     }
 
-    public McGui(JavaPlugin plugin, GUILayout layout ) {
+    public McGui( JavaPlugin plugin, GUILayout layout ) {
         this( plugin, "McGUI", layout );
     }
 
     /**
-     *
      * @return byte value to be used as sub ids to color wool / glass
      */
     public static byte getRandomColor() {
@@ -79,8 +89,7 @@ public class McGui implements GUIContainer {
     public void init() {
         if ( layout.getInventoryType() == InventoryType.CHEST ) {
             inventory = Bukkit.createInventory( null, layout.getInventorySize(), title );
-        }
-        else {
+        } else {
             inventory = Bukkit.createInventory( null, layout.getInventoryType(), title );
         }
 
@@ -98,22 +107,37 @@ public class McGui implements GUIContainer {
     public void draw( Player player ) {
         this.player = player;
 
-        if(!registered){
-            plugin.getServer().getPluginManager().registerEvents( listener, plugin);
+        if ( !registered ) {
+            plugin.getServer().getPluginManager().registerEvents( listener, plugin );
         }
         if ( inventory.getType() == InventoryType.CHEST || inventory.getType() == InventoryType.ENDER_CHEST ) {
             player.openInventory( inventory );
-        }
-        else if ( inventory.getType() == InventoryType.CRAFTING ) {
+        } else if ( inventory.getType() == InventoryType.CRAFTING ) {
             InventoryView view = player.openWorkbench( player.getLocation(), true );
             inventory = view.getTopInventory();
-        }
-        else if ( inventory.getType() == InventoryType.ENCHANTING ) {
+        } else if ( inventory.getType() == InventoryType.ENCHANTING ) {
             InventoryView view = player.openEnchanting( player.getLocation(), true );
             inventory = view.getTopInventory();
         }
     }
 
+    public void query( Map< String, QueryParameter > parameterMap ) {
+        Router.getInstance().query( this, parameterMap );
+    }
+
+    public void query( String queryString ) {
+        if(queryString==null || queryString.isEmpty()) return;
+
+        //Use identifier for query in URI
+        if(!queryString.startsWith( "?" ))
+            queryString = "?" + queryString;
+
+        URI uri = URI.create( queryString );
+        if(uri.getQuery()==null) throw new InvalidRouteException( InvalidRouteException.Cause.QUERY,"Query not found: "+queryString);
+
+        Map<String, QueryParameter> parameterMap = Router.getInstance().splitQuery( uri );
+        query( parameterMap );
+    }
 
     public void dispose( Player player ) {
         player.closeInventory();
@@ -141,8 +165,8 @@ public class McGui implements GUIContainer {
     @Override
     public GUIElement getElementByName( String name ) {
         for ( GUIComponent component : components ) {
-            if(component instanceof GUIElement){
-                if(( (GUIElement) component ).getNative().getItemMeta().getDisplayName().equals( name )){
+            if ( component instanceof GUIElement ) {
+                if ( ( (GUIElement) component ).getNative().getItemMeta().getDisplayName().equals( name ) ) {
                     return (GUIElement) component;
                 }
             }
@@ -150,15 +174,15 @@ public class McGui implements GUIContainer {
         return null;
     }
 
-    public GUIElement getElement(int x, int y){
-        return getElement( new Vector2i( x,y ) );
+    public GUIElement getElement( int x, int y ) {
+        return getElement( new Vector2i( x, y ) );
     }
 
     @Override
     public GUIElement getElement( Vector2i position ) {
         for ( GUIComponent component : components ) {
-            if(component instanceof GUIElement){
-                if(( (GUIElement) component ).getPosition().equals( position )){
+            if ( component instanceof GUIElement ) {
+                if ( ( (GUIElement) component ).getPosition().equals( position ) ) {
                     return (GUIElement) component;
                 }
             }
@@ -170,8 +194,7 @@ public class McGui implements GUIContainer {
     public Object clone() {
         try {
             return super.clone();
-        }
-        catch ( CloneNotSupportedException e ) {
+        } catch ( CloneNotSupportedException e ) {
             e.printStackTrace();
         }
         return null;
@@ -198,7 +221,7 @@ public class McGui implements GUIContainer {
     }
 
     @Override
-    public List<GUIEvent> getGlobalEvents() {
+    public List< GUIEvent > getGlobalEvents() {
         return listener.getGlobalHooks();
     }
 
@@ -257,18 +280,18 @@ public class McGui implements GUIContainer {
     }
 
     @Override
-    public List<GUIEvent> getEvents() {
+    public List< GUIEvent > getEvents() {
         return events;
     }
 
     @Override
-    public void setEvents( List<GUIEvent> events ) {
+    public void setEvents( List< GUIEvent > events ) {
         this.events = events;
     }
 
     @Override
-    public void setGlobalEvents( List<GUIEvent> events ) {
-        listener.setGlobalHooks( (ArrayList<GUIEvent>) events );
+    public void setGlobalEvents( List< GUIEvent > events ) {
+        listener.setGlobalHooks( (ArrayList< GUIEvent >) events );
     }
 
     public String getTitle() {
@@ -279,27 +302,57 @@ public class McGui implements GUIContainer {
         this.title = title;
     }
 
-    public List<GUIComponent> getComponents() {
+    public List< GUIComponent > getComponents() {
         return components;
     }
 
     @Override
-    public Player getPlayer(){
+    public Player getPlayer() {
         return player;
     }
 
+    /**
+     * Sets the player receiving the GUI. This method is
+     * important for query methods which are executed before
+     * the actual draw call. During the draw call, the player
+     * will be overwritten again.
+     *
+     * @param player the player
+     */
+    public void setPlayer( Player player ) {
+        this.player = player;
+    }
+
     @Override
-    public boolean isNativeListenerRegistered(){
+    public boolean isNativeListenerRegistered() {
         return registered;
     }
 
     @Override
-    public void setNativeListenerRegistered(boolean registered){
+    public void setNativeListenerRegistered( boolean registered ) {
         this.registered = registered;
     }
 
     @Override
-    public JavaPlugin getPlugin(){
+    public JavaPlugin getPlugin() {
         return plugin;
+    }
+
+    /**
+     * Mathematical function to determine a suited
+     * inventory size.
+     * For example 15 Items are rounded to 18 inventory slots.
+     *
+     * This method is static to enable a call within super constructor
+     * for the Layouts.
+     *
+     * @param elements      the number of elements to round up
+     *
+     * @return the numbers multiple
+     */
+    protected final static int round( int elements )
+    {
+        final int multiple = 9;
+        return multiple * (int) Math.ceil( (float) elements / (float) multiple );
     }
 }
