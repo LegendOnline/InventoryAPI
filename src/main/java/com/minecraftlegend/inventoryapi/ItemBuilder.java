@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -86,8 +87,16 @@ public class ItemBuilder {
      */
     public ItemBuilder lore(String str){
         Validate.notNull( str , "Lore is null");
+
+        if(!meta.hasLore())
+            meta.setLore( new ArrayList<>() );
+
+        List<String> metaLore = meta.getLore();
         for(String lore : str.split("\n"))
-            meta.getLore().add( lore );
+        {
+            metaLore.add( lore );
+        }
+        meta.setLore( metaLore );
         item.setItemMeta( meta );
         return this;
     }
