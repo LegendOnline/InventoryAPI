@@ -221,7 +221,7 @@ public final class MenuRow {
      *************************************************************/
 
     private GUIElement getCloseButton( String closeText ) {
-        GUIButton button = new GUIButton( new ItemBuilder().head( "MHF_X", closeText ).build() );
+        GUIButton button = new GUIButton( new ItemBuilder().head( "MHF_Exclamation", closeText ).build() );
         button.addEvent( new GUIEvent() {
             @Override
             public void onClick( ComponentClickEvent event ) {
