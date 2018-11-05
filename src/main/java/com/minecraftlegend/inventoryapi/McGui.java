@@ -121,10 +121,10 @@ public class McGui implements GUIContainer {
         }
     }
 
-    public void query( Map< String, QueryParameter > parameterMap ) {
-        Router.getInstance().query( this, parameterMap );
-    }
-
+    /**
+     * Queries and calls a method tagged with @Query
+     * @param queryString the URI like query
+     */
     public void query( String queryString ) {
         if(queryString==null || queryString.isEmpty()) return;
 
@@ -137,6 +137,14 @@ public class McGui implements GUIContainer {
 
         Map<String, QueryParameter> parameterMap = Router.getInstance().splitQuery( uri );
         query( parameterMap );
+    }
+
+    /**
+     * Queries and calls a method tagged with @Query
+     * @param parameterMap a map with parameters and values
+     */
+    public void query( Map< String, QueryParameter > parameterMap ) {
+        Router.getInstance().query( this, parameterMap );
     }
 
     public void dispose( Player player ) {

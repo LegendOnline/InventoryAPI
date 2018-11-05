@@ -36,7 +36,7 @@ import java.util.List;
  * @version 1.0
  * @since 20.09.2017
  */
-public final class MenuRow extends ArrayList<GUIElement> {
+public final class MenuRow {
 
     private static final int ROW_LENGTH = 9;    //< The length of one minecraft inventory row
 
@@ -48,13 +48,14 @@ public final class MenuRow extends ArrayList<GUIElement> {
 
     private boolean prepared = false;
 
+    private ArrayList<GUIElement> row;
+
     /**
      * Instantiates a new Menu row. Close and back
      * button are set with default texts.
      */
     public MenuRow() {
-        super( ROW_LENGTH ); //Preload the List
-        setDefaultButtons( null );
+        this(null,null);
     }
 
     /**
@@ -64,7 +65,7 @@ public final class MenuRow extends ArrayList<GUIElement> {
      * @param backBtnText  the back btn text
      */
     public MenuRow( String closeBtnText, String backBtnText ) {
-        super(ROW_LENGTH);
+        this.row = new ArrayList<>( ROW_LENGTH ); //Preload the List
         this.closeBtnText = closeBtnText;
         this.backBtnText = backBtnText;
         setDefaultButtons( null );
@@ -72,6 +73,7 @@ public final class MenuRow extends ArrayList<GUIElement> {
 
     /**
      * Sets the title for the default close button of this instance
+     *
      * @param closeBtnText the title
      */
     public void setCloseBtnText( String closeBtnText ) {
@@ -80,6 +82,7 @@ public final class MenuRow extends ArrayList<GUIElement> {
 
     /**
      * Sets the title for the default back button of this instance
+     *
      * @param backBtnText the title
      */
     public void setBackBtnText( String backBtnText ) {
@@ -90,16 +93,21 @@ public final class MenuRow extends ArrayList<GUIElement> {
      * Sets the default buttons for the GUI.
      * Back -and CloseButton. The backbutton is just
      * set depending on the player
+     *
      * @param player the player
      */
     public void setDefaultButtons( Player player ) {
+
+        //Add 9 filler items
+        for (int i = this.row.size(); i < ROW_LENGTH; i++) {
+            this.row.add( getFillerItem() );
+        }
+
         //Set default items
         if ( player != null && Navigation.getInstance().canPop( player ) )
-            set( SLOT_BACK, getBackButton( closeBtnText==null?"§c<---":closeBtnText )  );
-        else
-            set( SLOT_BACK, getFillerItem() );
+            set( SLOT_BACK, getBackButton( backBtnText==null?"§c<---":backBtnText  )  );
 
-        set( SLOT_CLOSE, getCloseButton( backBtnText==null?"§cX":backBtnText ) );
+        set( SLOT_CLOSE, getCloseButton( closeBtnText==null?"§cX":closeBtnText ) );
     }
 
     /**
@@ -115,18 +123,11 @@ public final class MenuRow extends ArrayList<GUIElement> {
         //This button will be added depending on the history of the player
         setDefaultButtons( player );
 
-        //Add filler items
-        int counter = 1;
-        while ( counter < ROW_LENGTH - 1 ) {
-            if ( get( counter ) == null ) set( counter, getFillerItem() );
-            counter++;
-        }
-
         //Always just 9 Items!
-        if ( size() > ROW_LENGTH ) {
-            List<GUIElement> tmp = subList( 0, ROW_LENGTH );
-            clear();
-            addAll( tmp );
+        if ( this.row.size() > ROW_LENGTH ) {
+            List<GUIElement> tmp = this.row.subList( 0, ROW_LENGTH );
+            this.row.clear();
+            this.row.addAll( tmp );
         }
 
         prepared = true;
@@ -149,31 +150,68 @@ public final class MenuRow extends ArrayList<GUIElement> {
         if(!prepared) prepareMenu( player );
 
         //The first row of the layout is important!
-        if ( firstRow.length() != 9 ) return;
+        if ( firstRow.length() != ROW_LENGTH ) return;
         int counter = 0;
         for ( char c : firstRow.toCharArray() ) {
-            layout.set( c, get( counter ) );
+            layout.set( c, this.row.get( counter ) );
             counter++;
         }
     }
 
-    @Override
+    /**
+     * Get's the item of the row.
+     *
+     * @return the gui element row
+     */
+    public ArrayList<GUIElement> getRow()
+    {
+        return this.row;
+    }
+
+    /**
+     * Removes a gui element.
+     *
+     * @param index the index
+     *
+     * @return the removed gui element
+     */
     public GUIElement remove( int index ) {
-        GUIElement element = get( index );
-        set( index,null );
+        GUIElement element = this.row.get( index );
+        set( index,getFillerItem() );
         return element;
     }
 
-    @Override
+    /**
+     * Sets a gui element at a given index.
+     * The index can't be bigger then the row length.
+     *
+     * @param index   the index
+     * @param element the element
+     *
+     * @return the gui element
+     */
     public GUIElement set( int index, GUIElement element ) {
-        if ( index < ROW_LENGTH ) return super.set( index, element );
-        else return element;
+        if ( index < ROW_LENGTH )
+            return this.row.set( index, element );
+
+         return element;
     }
 
-    @Override
+    /**
+     * Clears the row and sets the default buttons.
+     */
     public void clear() {
-        super.clear();
+        clear( null );
+    }
+
+    /**
+     * Clears the row and sets the default buttons.
+     * @param player the player for the default navigation buttons
+     */
+    public void clear(Player player) {
+        this.row.clear();
         this.prepared = false;
+        setDefaultButtons( player );
     }
 
     /*************************************************************
@@ -183,7 +221,7 @@ public final class MenuRow extends ArrayList<GUIElement> {
      *************************************************************/
 
     private GUIElement getCloseButton( String closeText ) {
-        GUIButton button = new GUIButton( new ItemBuilder().head( "NHF_X", closeText ).build() );
+        GUIButton button = new GUIButton( new ItemBuilder().head( "MHF_Exclamation", closeText ).build() );
         button.addEvent( new GUIEvent() {
             @Override
             public void onClick( ComponentClickEvent event ) {
@@ -194,7 +232,7 @@ public final class MenuRow extends ArrayList<GUIElement> {
     }
 
     private GUIElement getBackButton( String backText ) {
-        GUIButton button = new GUIButton( new ItemBuilder().head( "NHF_ArrowLeft", backText ).build() );
+        GUIButton button = new GUIButton( new ItemBuilder().head( "MHF_ArrowLeft", backText ).build() );
         button.addEvent( new GUIEvent() {
             @Override
             public void onClick( ComponentClickEvent event ) {
