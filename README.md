@@ -1,4 +1,4 @@
-# InventoryAPI 1.2
+# InventoryAPI 1.3
 ![logo](https://www.minecraftlegend.com/wp-content/uploads/2016/12/legend-awakening_logo.png)  
 
 This inventory library is used to easily create/modify Minecraft inventories.<br>
@@ -23,13 +23,13 @@ There are two ways to implement this library into your project:
  <dependency>
     <groupId>com.minecraftlegend</groupId>
     <artifactId>inventoryapi</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.3-SNAPSHOT</version>
     <scope>compile</scope>
  </dependency>
 ```
 ### Direct implementation
 Either you can download the source code from [here](https://github.com/LegendOnline/InventoryAPI.git) and copy it into a separate package of your project,<br>
-or download a compiled version from [here](https://github.com/LegendOnline/InventoryAPI/blob/mvn-repo/com/minecraftlegend/inventoryapi/1.2-SNAPSHOT/inventoryapi-1.2-20170820.011144-1.jar) (freshly compiled from our ci Server) and integrate the library as a dependency.
+or download a compiled version from [here](https://github.com/LegendOnline/InventoryAPI/raw/mvn-repo/com/minecraftlegend/inventoryapi/1.3-SNAPSHOT/inventoryapi-1.3-20181105.140651-1.jar) (freshly compiled from our ci Server) and integrate the library as a dependency.
 
 ## How to use
 Basically, if you know Java Swing, you know this InventoryAPI<br>
@@ -37,6 +37,9 @@ But please take a look at our [Wiki](https://github.com/LegendOnline/InventoryAP
 Here are some snapshots of inventories created with our API:
 
 ## Changelog
+###Version 1.3
++ added routes and URI representation of GUIs
++ minor bugfixes
 ### Version 1.2:
 + many many bugfixes
 + some api improvements (additional methods / tweaks / better performance)
