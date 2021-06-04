@@ -6,7 +6,6 @@ import com.minecraftlegend.inventoryapi.GUIContainer;
 import com.minecraftlegend.inventoryapi.GUIElement;
 import com.minecraftlegend.inventoryapi.GUIEvent;
 import com.minecraftlegend.inventoryapi.utils.Vector2i;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -14,6 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @Author Sauerbier | Jan
@@ -111,9 +111,9 @@ public class GUILabel implements GUIElement {
     @Override
     public void draw() {
         //System.out.println("item position: ("+parent.getInventory().getTitle()+")" +position.toString());
-        Validate.notNull(parent, "error while drawing label: parent is null");
-        Validate.notNull(item, "error while drawing label: item is null");
-        Validate.notNull(position, "error while drawing label: position is null");
+        Objects.requireNonNull(parent);
+        Objects.requireNonNull(item);
+        Objects.requireNonNull(position);
         parent.getInventory().setItem(position.getX() + position.getY() * 9, item);
     }
 

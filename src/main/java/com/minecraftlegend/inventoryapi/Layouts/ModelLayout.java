@@ -4,7 +4,6 @@ package com.minecraftlegend.inventoryapi.Layouts;
 import com.minecraftlegend.inventoryapi.GUIContainer;
 import com.minecraftlegend.inventoryapi.GUIElement;
 import com.minecraftlegend.inventoryapi.utils.Vector2i;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
 
@@ -63,7 +62,8 @@ public class ModelLayout extends ExactLayout {
             if ( op.matches( "\\d:\\d=." ) ) {
                 Vector2i coords = parseCoordinates( op.split( "=" )[0] );
                 char key = op.split( "=" )[1].charAt( 0 );
-                Validate.isTrue( isSet( key ), "key: " + key + " is not referenced!" );
+                if(!isSet(key))
+                    throw new RuntimeException("key: " + key + " is not referenced!" );
                 GUIElement orig = slots.get( key );
                 //original element has already be assigned | there should be some bulk change element in the future
                 //to receive all affected slots / items
@@ -82,7 +82,8 @@ public class ModelLayout extends ExactLayout {
                 Vector2i start = parseCoordinates( components[0].split( "-" )[0] );
                 Vector2i end = new Vector2i( Integer.parseInt( components[0].split( "-" )[1] ), start.getY() );
                 char key = components[1].charAt( 0 );
-                Validate.isTrue( isSet( key ), "key: " + key + " is not referenced!" );
+                if(!isSet(key))
+                    throw new RuntimeException("key: " + key + " is not referenced!" );
                 GUIElement element = slots.get( key );
                 for ( int x = Math.min( start.getX(), end.getX() ); x < Math.max( start.getX(), end.getX() ); x++ ) {
                     Vector2i pos = start.clone();
@@ -107,7 +108,8 @@ public class ModelLayout extends ExactLayout {
                 Vector2i start = parseCoordinates( components[0].split( "\\|" )[0] );
                 Vector2i end = new Vector2i( start.getX(), Integer.parseInt( components[0].split( "\\|" )[1] ) );
                 char key = components[1].charAt( 0 );
-                Validate.isTrue( isSet( key ), "key: " + key + " is not referenced!" );
+                if(!isSet(key))
+                    throw new RuntimeException("key: " + key + " is not referenced!" );
                 GUIElement element = slots.get( key );
                 for ( int y = Math.min( start.getY(), end.getY() ); y < Math.max( start.getY(), end.getY() ); y++ ) {
                     Vector2i pos = start.clone();
@@ -132,7 +134,8 @@ public class ModelLayout extends ExactLayout {
                 Vector2i start = parseCoordinates( components[0].split( "#" )[0] );
                 Vector2i end = parseCoordinates( components[0].split( "#" )[1] );
                 char key = components[1].charAt( 0 );
-                Validate.isTrue( isSet( key ), "key: " + key + " is not referenced!" );
+                if(!isSet(key))
+                    throw new RuntimeException("key: " + key + " is not referenced!" );
                 GUIElement element = slots.get( key );
 
                 for ( int y = start.getY(); y <= end.getY(); y++ ) {
@@ -157,7 +160,8 @@ public class ModelLayout extends ExactLayout {
             }
             else if ( op.matches( "\\*=." ) ) {
                 char key = op.split( "=" )[1].charAt( 0 );
-                Validate.isTrue( isSet( key ), "key: " + key + " is not referenced!" );
+                if(!isSet(key))
+                    throw new RuntimeException("key: " + key + " is not referenced!" );
                 GUIElement element = slots.get( key );
 
                 Inventory inv = container.getInventory();
@@ -189,12 +193,14 @@ public class ModelLayout extends ExactLayout {
     }
 
     private Vector2i parseCoordinates( String str ) {
-        Validate.isTrue( str.matches( "\\d:\\d" ), "coordinates '" + str + "' doesnt match pattern x:y" );
+        if(!str.matches("\\d:\\d"))
+            throw new RuntimeException("coordinates '" + str + "' doesnt match pattern x:y" );
         String[] coords = str.split( ":" );
         int x = Integer.parseInt( coords[0] ) - 1;
         int y = Integer.parseInt( coords[1] ) - 1;
 
-        Validate.isTrue( (x+1 != 0 && y+1 != 0), "coordinates [" + x + "|" + y + "] have to be greater than 0" );
+        if(! (x+1 != 0 && y+1 != 0))
+            throw new RuntimeException("coordinates [" + x + "|" + y + "] have to be greater than 0");
         return new Vector2i( x, y );
     }
 

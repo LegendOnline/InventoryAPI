@@ -5,7 +5,6 @@ import com.minecraftlegend.inventoryapi.Router.QueryParameter;
 import com.minecraftlegend.inventoryapi.Router.Router;
 import com.minecraftlegend.inventoryapi.Router.exception.InvalidRouteException;
 import com.minecraftlegend.inventoryapi.utils.Vector2i;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -276,7 +275,7 @@ public class McGui implements GUIContainer {
 
     @Override
     public void setSize( Vector2i dimension ) {
-        Validate.isTrue( inventory.getType() == InventoryType.CHEST, "Size can only be adjusted if the inventory is a chest!" );
+        if(inventory.getType() != InventoryType.CHEST) throw new RuntimeException("Size can only be adjusted if the inventory is a chest!");
         ItemStack[] contents = inventory.getContents();
         InventoryHolder holder = inventory.getHolder();
         int stack = inventory.getMaxStackSize();

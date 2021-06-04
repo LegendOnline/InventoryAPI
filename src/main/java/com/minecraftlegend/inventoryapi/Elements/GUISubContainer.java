@@ -8,12 +8,13 @@ import com.minecraftlegend.inventoryapi.GUIEvent;
 import com.minecraftlegend.inventoryapi.GUILayout;
 import com.minecraftlegend.inventoryapi.McGui;
 import com.minecraftlegend.inventoryapi.utils.Vector2i;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.Objects;
 
 /**
  * @Author Sauerbier | Jan
@@ -111,7 +112,7 @@ public class GUISubContainer extends McGui {
             handleExit();
         }
         else {
-            Validate.notNull( parent, "tried to create sub container with null parent. This could cause event & locking issues!" );
+            Objects.requireNonNull(parent, "tried to create sub container with null parent. This could cause event & locking issues!" );
         }
 
     }

@@ -6,12 +6,12 @@ import com.minecraftlegend.inventoryapi.GUIContainer;
 import com.minecraftlegend.inventoryapi.GUIElement;
 import com.minecraftlegend.inventoryapi.GUIEvent;
 import com.minecraftlegend.inventoryapi.utils.Vector2i;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @Author Sauerbier | Jan
@@ -172,7 +172,7 @@ public class GUIProgressBar implements GUIElement {
      * @param progress can only be setted if this element has been added to a container!
      */
     public void setProgress( double progress ) {
-        Validate.isTrue( parent != null, "Progress can only be setted if this element has been added to a container!" );
+        Objects.requireNonNull(parent);
         if ( progress >= FULL ) {
 
             progress = FULL;

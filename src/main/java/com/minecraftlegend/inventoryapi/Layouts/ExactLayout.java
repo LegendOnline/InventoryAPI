@@ -5,7 +5,6 @@ import com.minecraftlegend.inventoryapi.GUIContainer;
 import com.minecraftlegend.inventoryapi.GUIElement;
 import com.minecraftlegend.inventoryapi.GUILayout;
 import com.minecraftlegend.inventoryapi.utils.Vector2i;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.event.inventory.InventoryType;
 
 import java.util.HashMap;
@@ -39,7 +38,7 @@ public class ExactLayout implements GUILayout {
         this.rawLayout = rows;
         for ( int i = 0; i < rawLayout.length; i++ ) {
             String s = rawLayout[i];
-            Validate.isTrue( s.length() == 9, "An inventory row has to have 9 items! row: " + i + " has " + s.length() + " chars!" );
+            if(s.length() != 9) throw new RuntimeException("An inventory row has to have 9 items! row: " + i + " has " + s.length() + " chars!");
         }
         totalSize = rawLayout.length * 9;
         dim = new Vector2i( 9, rawLayout.length );
@@ -61,7 +60,7 @@ public class ExactLayout implements GUILayout {
 
         for ( int i = 0; i < rawLayout.length; i++ ) {
             for ( int j = 0; j < rawLayout[i].length(); j++ ) {
-                Validate.isTrue( isSet( rawLayout[i].charAt( j ) ), "key: " + rawLayout[i].charAt( j ) + " is not referenced!" );
+                if(!isSet( rawLayout[i].charAt( j ))) throw new RuntimeException("key: " + rawLayout[i].charAt( j ) + " is not referenced!");
                 GUIElement orig = slots.get( rawLayout[i].charAt( j ) );
                 //original element has already be assigned | there should be some bulk change element in the future
                 //to receive all affected slots / items
